@@ -1,0 +1,237 @@
+<?php
+/*
+	+-----------------------------------------------------------------------------+
+	| ILIAS open source                                                           |
+	+-----------------------------------------------------------------------------+
+	| Copyright (c) 1998-2014 ILIAS open source, University of Cologne            |
+	|                                                                             |
+	| This program is free software; you can redistribute it and/or               |
+	| modify it under the terms of the GNU General Public License                 |
+	| as published by the Free Software Foundation; either version 2              |
+	| of the License, or (at your option) any later version.                      |
+	|                                                                             |
+	| This program is distributed in the hope that it will be useful,             |
+	| but WITHOUT ANY WARRANTY; without even the implied warranty of              |
+	| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               |
+	| GNU General Public License for more details.                                |
+	|                                                                             |
+	| You should have received a copy of the GNU General Public License           |
+	| along with this program; if not, write to the Free Software                 |
+	| Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. |
+	+-----------------------------------------------------------------------------+
+*/
+
+// require_once('Services/Calendar/classes/class.ilDateTime.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
+
+
+/**
+ * Class ilObjShortLink
+ * Object for the ShortLinkPlugin
+ *
+ * @author  Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
+ * @version $Id$
+ */
+class ilObjShortLink {
+
+    /**
+     * @var ilDB $db
+     */
+    protected $db;
+    /**
+     * @var ilUser $usr
+     */
+    protected $usr;
+    /**
+     * @var id $id
+     */
+    protected $id;
+    /**
+     * @var string $contact
+     */
+    protected $contact;
+    /**
+     * @var string $longURL
+     */
+    protected $longURL;
+    /**
+     * @var string $shortLink
+     */
+    protected $shortLink;
+
+
+    public function __construct() {
+        global $ilDB, $ilUser;
+
+        $this->db = $ilDB;
+        $this->usr = $ilUser;
+
+
+        $this->shortLinkAccessChecker = new ilShortLinkAccess();
+    }
+
+    public function doCreate() {
+        $stmt = $this->db->prepare('INSERT INTO ' . ilShortLinkPlugin::TABLE_NAME .
+            ' (id, short_link, full_url, contact_user_login) VALUES (?, ?, ?, ?);',
+            array('integer', 'text', 'text', 'text'));
+        $this->db->execute($stmt, array($this->getId(), $this->getShortLink(), $this->getLongURL(), $this->getContact()));
+    }
+
+    /**
+     *
+     * Get one entry from DB and put it into an array
+     *
+     * @param bool $as_obj return array of objects or array of values
+     * @return ShortLinks[]|array
+     */
+    // TODO: refactor readSingleEntry and readTablesPerUSer
+    public function readSingleEntry($as_obj = TRUE, $id) {
+        $currentUser = $this->usr->getLogin();
+        $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $id);
+
+        $singleEntry = array();
+
+        while ($rec = $this->db->fetchAssoc($set)) {
+            if ($as_obj) {
+                if($currentUser == $rec['contact_user_login']){
+                    $singleEntry[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
+                        'contact'=>$rec['contact_user_login']);
+                }
+            } else {
+                $shortLinks[] = $rec;
+            }
+        }
+        return $singleEntry;
+    }
+
+    public function nextId() {
+        $this->setId($this->db->nextId(ilShortLinkPlugin::TABLE_NAME));
+    }
+
+
+    /**
+     *
+     * Get data from DB and put it into an array
+     *
+     * @param bool $as_obj return array of objects or array of values
+     * @return ShortLinks[]|array
+     */
+    // TODO: refactor readSingleEntry and readTablesPerUSer
+    public function readTablesPerUser($as_obj = TRUE) { // << ?? $as_obj reason?? >>
+
+        $shortLinks = array();
+        $currentUser = $this->usr->getLogin();
+
+        $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
+        // checking if current user is an Admin through rbac role system
+        $isAdministrator = $this->shortLinkAccessChecker->checkAdministrationPrivileges($currentUser);
+        while ($rec = $this->db->fetchAssoc($set)) {
+            if ($as_obj) {
+                if($isAdministrator){
+                    $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
+                        'contact'=>$rec['contact_user_login']);
+                }
+                else if($currentUser == $rec['contact_user_login']){
+                    $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
+                        'contact'=>$rec['contact_user_login']);
+                }
+            } else {
+                $shortLinks[] = $rec;
+            }
+        }
+        return $shortLinks;
+    }
+
+    public function doUpdate() {
+        $this->db->manipulate('UPDATE ' . ilShortLinkPlugin::TABLE_NAME . ' SET' .
+            ' short_link = ' . $this->db->quote($this->getShortLink(), 'text') . ',' .
+            ' full_url = ' . $this->db->quote($this->getLongURL(), 'text') .
+            ' WHERE id = ' . $this->db->quote($this->getId(), 'text') . ';'
+        );
+    }
+
+    public function getOwner($idNum) {
+        //$this->setId($_GET['link_id']);
+        //var_dump($this->getId()); exit;
+
+        $this->setId($idNum);
+        $set = $this->db->query('SELECT contact_user_login FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $this->getId());
+        $rec = $this->db->fetchAssoc($set);
+        return $rec['contact_user_login'];
+    }
+
+    public function fetchLongURL($shortLink) {
+        $set = $this->db->query('SELECT full_url FROM ' .ilShortLinkPlugin::TABLE_NAME . ' WHERE short_link=' . "'" . $shortLink . "'");
+        $rec = $this->db->fetchAssoc($set);
+        return $rec['full_url'];
+    }
+
+
+    /**
+     *
+     * Deletes the entry with id $id from DB
+     *
+     * @param $id
+     */
+    public function doDelete($id) {
+        $this->db->manipulate('DELETE FROM ' . ilShortLinkPlugin::TABLE_NAME .
+            ' WHERE id = ' . $id, 'integer');
+    }
+
+
+    /**
+     * @param $id id of the object
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return $id
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param $contact the user
+     */
+    public function setContact($contact) {
+        $this->contact = $contact;
+    }
+
+    /**
+     * @return $contact
+     */
+    public function getContact() {
+        return $this->contact;
+    }
+
+    /**
+     * @param $longURL
+     */
+     public function setLongURL($longURL) {
+         $this->longURL = $longURL;
+     }
+
+    /**
+     * @return longURL
+     */
+    public function getLongURL() {
+        return $this->longURL;
+    }
+    /**
+     * @param $shortLink
+     */
+    public function setShortLink($shortLink) {
+        $this->shortLink = $shortLink;
+    }
+
+    /**
+     * @return shortLink
+     */
+    public function getShortLink() {
+        return $this->shortLink;
+    }
+
+}

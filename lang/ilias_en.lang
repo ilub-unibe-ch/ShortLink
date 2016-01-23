@@ -1,0 +1,45 @@
+MessageRecordListTable#:#Benachrichtigungen
+
+Test1#:#Test 1
+Test2#:#Test 2
+title#:#ShortLink GUI
+longUrl#:#full URL
+shortLink#:#ShortLink
+formTitle#:#Create new ShortLink
+add#:#Add
+msg_delete_order#:#Are you sure you want to delete the following shortlink?
+delete#:#Delete
+cancel#:#Cancel
+edit#:#Edit
+save#:#Save
+success_delete_entry#:#Your entry has been successfully deleted
+formUpdateTitle#:#Update ShortLink
+update#:#Update
+success_update_entry#:#Your entry has been successfully updated
+shortLink_id#:#shortLink_id
+permission_denied#:#Permission Denied
+mapping_wrong#:#Something went wrong with your reference to the shortLink
+
+message_before_event_title#:#Titel vor Event
+message_during_event_title#:#Titel wärend Event
+message_before_event_type#:#Nachrichtentyp vor Event
+message_during_event_type#:#Nachrichtentyp während Event
+start_message_date_time#:#Startdatum Nachricht
+start_event_date_time#:#Startdatum Event
+end_event_date_time#:#Enddatum Event
+create_Message#:#Nachricht erstellen
+message_before_event#:#Nachricht vor Event
+message_during_event#:#Nachricht wärend Event
+type_failure_message#:#Fehler
+type_warning_message#:#Warnung
+type_info_message#:#Info
+record_created#:#Eintrage Erstellt
+confirm_delete_record#:#Soll folgende Nachricht wirklich gelöscht werden?
+object#:#Nachricht
+edit_Message#:#Nachricht bearbeiten
+created#:#Erstellt am
+modified#:#Modifiziert am
+record#:#Nachricht
+add_message#:#Nachricht hinzufügen
+message_index#:#Nachrichten
+message#:#Am Samstag 17.01.2015 wird ILIAS aufgrund von Wartungsarbeiten am von 12.00 bis ca. 18.00 nicht verfügbar sein.
