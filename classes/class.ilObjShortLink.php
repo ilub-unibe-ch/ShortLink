@@ -151,9 +151,6 @@ class ilObjShortLink {
     }
 
     public function getOwner($idNum) {
-        //$this->setId($_GET['link_id']);
-        //var_dump($this->getId()); exit;
-
         $this->setId($idNum);
         $set = $this->db->query('SELECT contact_user_login FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $this->getId());
         $rec = $this->db->fetchAssoc($set);
@@ -187,7 +184,7 @@ class ilObjShortLink {
     }
 
     /**
-     * @return $id
+     * @return id
      */
     public function getId() {
         return $this->id;
@@ -201,7 +198,7 @@ class ilObjShortLink {
     }
 
     /**
-     * @return $contact
+     * @return contact
      */
     public function getContact() {
         return $this->contact;

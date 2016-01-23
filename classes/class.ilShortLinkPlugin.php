@@ -12,6 +12,7 @@ require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php
 class ilShortLinkPlugin extends ilUserInterfaceHookPlugin {
 
     const TABLE_NAME = 'ui_uihk_shortlink';
+
     /**
      * @return string
      */

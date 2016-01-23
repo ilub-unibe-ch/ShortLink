@@ -33,10 +33,6 @@ class ilShortLinkAccess {
      */
     protected $usr;
 
-    // TODO: werden die regulären variablen wie $pl und $currentUserID
-    // TODO: ebenfalls hier aufgelistet oder werden nur die globalen Variablen
-    // TODO: erwähnt
-
     /**
      * @var ilShortLinkPlugin $pl
      */
@@ -74,6 +70,8 @@ class ilShortLinkAccess {
         };
 
     }
+
+    // TODO: Is it ok to have some DB access happening here?
 
     public function checkAdministrationPrivileges() {
         $administrationRole = $this->getRoleIdOfAdministrator();

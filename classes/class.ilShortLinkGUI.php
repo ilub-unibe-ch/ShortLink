@@ -90,11 +90,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $cmd = $this->ctrl->getCmd();
         $this->setTabs();
 
-//        // Check that the permissions to enter ShortLink Administration are granted
-//        $granted = FALSE;
-//        /** @var ctrlmmEntry[] $mm_entries */
-//        $mm_entries = ctrlmmEntry::getEntriesByCmdClass(get_class($this));
-
         switch($cmd){
             case 'add':
             case 'save':
@@ -171,7 +166,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             $this->externalFeedBlock->doCreate();
         }
 
-        // $this->externalFeedBlock->setLongURL($this->$this->form->getInput("longURL"));
         $this->showContent();
     }
 
@@ -200,7 +194,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->obj->doUpdate();
         ilUtil::sendSuccess($this->pl->txt('success_update_entry'), TRUE);
         $this->ctrl->redirect($this, 'showContent');
-        // same as $this->showContent() ??
     }
 
     /**

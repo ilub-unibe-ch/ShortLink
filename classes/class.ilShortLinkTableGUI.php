@@ -41,7 +41,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     protected $actions = array();
 
     public function __construct($a_parent_obj, $a_parent_cmd) {
-        global $ilCtrl, $lng;
+        global $ilCtrl;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -69,7 +69,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         /** @var ilDB $ilDB */
         global $ilDB, $ilUser;
 
-        $shortLinks = array();
         $this->tester = new ilObjShortLink();
         $shortLinks = $this->tester->readTablesPerUser();
 
