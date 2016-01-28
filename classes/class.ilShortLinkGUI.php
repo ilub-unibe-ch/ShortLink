@@ -23,6 +23,8 @@
 
 require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
+include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php');
+require_once('Services/Utilities/classes/class.ilConfirmationGUI.php');
 include_once('Services/Form/classes/class.ilPropertyFormGUI.php');
 require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
 
@@ -107,11 +109,11 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'confirmedDelete':
             case 'doUpdate':
                 if($_GET['link_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission('write', $cmd, $this->obj, $_GET['link_id']);
+                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
                 } else if($_POST['obj_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission('write', $cmd, $this->obj, $_POST['obj_id']);
+                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['obj_id']);
                 } else if($_POST['shortLink_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission('write', $cmd, $this->obj, $_POST['shortLink_id']);
+                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
                 } else {
                     ilUtil::sendFailure($this->pl->txt("mapping_wrong"), true);
                     ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
