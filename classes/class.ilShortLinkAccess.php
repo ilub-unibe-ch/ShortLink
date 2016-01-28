@@ -29,7 +29,7 @@ class ilShortLinkAccess {
     protected $db;
 
     /**
-     * @var ilUser $usr
+     * @var ilObjUser $usr
      */
     protected $usr;
 

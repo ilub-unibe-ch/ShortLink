@@ -21,7 +21,8 @@
 	+-----------------------------------------------------------------------------+
 */
 
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
+require_once('./class.ilShortLinkAccess.php');
+
 
 
 /**
@@ -38,7 +39,7 @@ class ilObjShortLink {
      */
     protected $db;
     /**
-     * @var ilUser $usr
+     * @var ilObjUser $usr
      */
     protected $usr;
     /**

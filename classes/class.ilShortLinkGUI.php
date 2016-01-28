@@ -38,7 +38,7 @@ require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
  */
 class ilShortLinkGUI extends ilObjectPluginGUI {
     /**
-     * @var tpl $ilTemplate
+     * @var ilTemplate $my_tpl
      */
     protected $my_tpl;
     /**
@@ -65,6 +65,10 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      * @var ilObjShortLink $externalFeedBlock
      */
     protected $externalFeedBlock;
+    /**
+     * @var $tabs_gui
+     */
+    protected $tabs_gui;
 
     public function __construct() {
         global $ilCtrl, $tpl, $ilTabs;
@@ -78,6 +82,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->my_tpl = $tpl;
         $this->my_tpl->getStandardTemplate();
 
+        // TODO following $ilTabs to LiveVoting... sth must be wrong
+        // TODO further below addTab() is no function of $ilTabs....
         $this->tabs_gui = &$ilTabs;
 
         $this->pl = new ilShortLinkPlugin();
@@ -100,7 +106,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'delete':
             case 'confirmedDelete':
             case 'doUpdate':
-
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission('write', $cmd, $this->obj, $_GET['link_id']);
                 } else if($_POST['obj_id'] != NULL) {
@@ -171,7 +176,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     }
 
     public function listShortLinks() {
-        include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php');
         $table = new ilShortLinkTableGUI($this, ilShortLinkPlugin::TABLE_NAME);
         $this->my_tpl->setContent($table->getHTML());
     }
@@ -201,7 +205,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      * Confirmation GUI for deleting an order
      */
     public function delete() {
-        require_once('Services/Utilities/classes/class.ilConfirmationGUI.php');
         $c_gui = new ilConfirmationGUI();
         $c_gui->setFormAction($this->ctrl->getFormAction($this, $_GET['fallbackCmd']));
         $c_gui->setHeaderText($this->pl->txt('msg_delete_order'));
@@ -240,19 +243,17 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     }
 
     /**
-     * Init configuration form.
+     * Init Configuration Form
      *
-     * @return object form object
+     * @param bool $update
+     * @return ilPropertyFormGUI
      */
     public function initConfigurationForm($update = FALSE)
     {
         $this->tabs_gui->activateTab('Test1');
 
-        global $lng, $ilCtrl;
-
-        include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $this->form = new ilPropertyFormGUI();
-        $this->form->setFormAction($ilCtrl->getFormAction($this));
+        $this->form->setFormAction($this->ctrl->getFormAction($this));
         if($update) {
             $this->form->setTitle($this->pl->txt('formUpdateTitle'));
         } else {
