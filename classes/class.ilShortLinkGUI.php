@@ -23,7 +23,7 @@
 
 require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
-include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
+include_once('Services/Form/classes/class.ilPropertyFormGUI.php');
 require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
 
 
@@ -38,7 +38,7 @@ require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
  */
 class ilShortLinkGUI extends ilObjectPluginGUI {
     /**
-     * @var ilTemplate
+     * @var tpl $ilTemplate
      */
     protected $my_tpl;
     /**
@@ -46,24 +46,25 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     protected $ctrl;
     /**
-     * @var toolbar
+     * @var ilToolbarGUI $toolbar
      */
     protected $toolbar;
     /**
-     * @var obj
+     * @var ilObjShortLink $obj
      */
     protected $obj;
     /**
-     * @var shortLinkAccessChecker
+     * @var ilShortLinkAccess $shortLinkAccessChecker
      */
     protected $shortLinkAccessChecker;
-
-    static protected $tester;
-
     /**
-     * @var form
+     * @var ilPropertyFormGUI $form
      */
     protected $form;
+    /**
+     * @var ilObjShortLink $externalFeedBlock
+     */
+    protected $externalFeedBlock;
 
     public function __construct() {
         global $ilCtrl, $tpl, $ilTabs;
@@ -332,7 +333,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     }
 
     /**
-     * @return toolbar
+     * @return ilToolbarGUI
      */
     public function getToolbar() {
         return $this->toolbar;

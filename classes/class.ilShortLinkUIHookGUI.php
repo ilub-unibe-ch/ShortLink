@@ -34,5 +34,3 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
         $this->access = $ilAccess;
     }
 }
-
-?>

@@ -21,7 +21,6 @@
 	+-----------------------------------------------------------------------------+
 */
 
-// require_once('Services/Calendar/classes/class.ilDateTime.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
 
 
@@ -43,9 +42,9 @@ class ilObjShortLink {
      */
     protected $usr;
     /**
-     * @var id $id
+     * @var int $id
      */
-    protected $id;
+    protected $id = 0;
     /**
      * @var string $contact
      */
@@ -78,13 +77,10 @@ class ilObjShortLink {
     }
 
     /**
-     *
-     * Get one entry from DB and put it into an array
-     *
-     * @param bool $as_obj return array of objects or array of values
-     * @return ShortLinks[]|array
+     * @param bool $as_obj
+     * @param int $id
+     * @return array $singleEntry
      */
-    // TODO: refactor readSingleEntry and readTablesPerUSer
     public function readSingleEntry($as_obj = TRUE, $id) {
         $currentUser = $this->usr->getLogin();
         $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $id);
@@ -108,22 +104,17 @@ class ilObjShortLink {
         $this->setId($this->db->nextId(ilShortLinkPlugin::TABLE_NAME));
     }
 
-
     /**
-     *
      * Get data from DB and put it into an array
      *
-     * @param bool $as_obj return array of objects or array of values
-     * @return ShortLinks[]|array
+     * @param bool $as_obj
+     * @return array $shortLinks
      */
-    // TODO: refactor readSingleEntry and readTablesPerUSer
     public function readTablesPerUser($as_obj = TRUE) { // << ?? $as_obj reason?? >>
-
         $shortLinks = array();
         $currentUser = $this->usr->getLogin();
 
         $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
-        // checking if current user is an Admin through rbac role system
         $isAdministrator = $this->shortLinkAccessChecker->checkAdministrationPrivileges($currentUser);
         while ($rec = $this->db->fetchAssoc($set)) {
             if ($as_obj) {
@@ -177,28 +168,28 @@ class ilObjShortLink {
 
 
     /**
-     * @param $id id of the object
+     * @param $id
      */
     public function setId($id) {
         $this->id = $id;
     }
 
     /**
-     * @return id
+     * @return int $id
      */
     public function getId() {
         return $this->id;
     }
 
     /**
-     * @param $contact the user
+     * @param $contact
      */
     public function setContact($contact) {
         $this->contact = $contact;
     }
 
     /**
-     * @return contact
+     * @return string $contact
      */
     public function getContact() {
         return $this->contact;
@@ -212,7 +203,7 @@ class ilObjShortLink {
      }
 
     /**
-     * @return longURL
+     * @return string $longURL
      */
     public function getLongURL() {
         return $this->longURL;
@@ -225,7 +216,7 @@ class ilObjShortLink {
     }
 
     /**
-     * @return shortLink
+     * @return string $shortLink
      */
     public function getShortLink() {
         return $this->shortLink;

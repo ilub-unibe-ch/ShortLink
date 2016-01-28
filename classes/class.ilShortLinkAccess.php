@@ -56,9 +56,8 @@ class ilShortLinkAccess {
     }
 
     // TODO: do I instantiate a new Object or pass it by reference? $this->obj = new ilObjShortLink() in constructor
-    // TODO: or checkPermission($obj);
 
-    public function checkPermission($permission, $command, $obj, $idNum) {
+    public function checkPermission(ilObjShortLink $obj, $idNum) {
 
         $isOwner = $obj->getOwner($idNum) == $this->usr->getLogin();
         $isAdmin = $this->checkAdministrationPrivileges();
@@ -68,7 +67,6 @@ class ilShortLinkAccess {
             ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
             ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
         };
-
     }
 
     // TODO: Is it ok to have some DB access happening here?

@@ -20,5 +20,3 @@ class ilShortLinkPlugin extends ilUserInterfaceHookPlugin {
         return 'ShortLink';
     }
 }
-
-?>

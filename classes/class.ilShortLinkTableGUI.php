@@ -39,9 +39,18 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      * @var array
      */
     protected $actions = array();
+    /**
+     * @var ilCtrl $ctrl
+     */
+    protected $ctrl;
+    /**
+     * @var ilObjShortLink $obj
+     */
+    protected $obj;
 
     public function __construct($a_parent_obj, $a_parent_cmd) {
         global $ilCtrl;
+        $this->ctrl = $ilCtrl;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -53,7 +62,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->setShowRowsSelector(true);
 
         $this->setEnableHeader(true);
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->getMyDataFromDb();
         $this->setTitle("Title");
     }
@@ -62,20 +71,14 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      *
      * Get data and put it into an array
      *
-     * @param bool $as_obj return array of objects or array of values
-     * @return ShortLinks[]|array
+     * @return array
      */
-    public function getMyDataFromDb($as_obj = TRUE) { // << ?? $as_obj reason?? >>
-        /** @var ilDB $ilDB */
-        global $ilDB, $ilUser;
-
-        $this->tester = new ilObjShortLink();
-        $shortLinks = $this->tester->readTablesPerUser();
-
+    public function getMyDataFromDb() {
+        $this->obj = new ilObjShortLink();
 
         $this->setDefaultOrderField("id");
         $this->setDefaultOrderDirection("asc");
-        $this->setData($shortLinks);
+        $this->setData($this->obj->readTablesPerUser());
     }
 
     /**
@@ -93,20 +96,14 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     }
 
     protected function fillRow($a_set) {
-        global $ilCtrl;
-
         $this->initRowTemplate();
 
         $this->tpl->setVariable("ID", $a_set['id']);
         $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
         $this->tpl->setVariable("SHORTLINK", $a_set['short_link']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
-
-        // $this->ctrl->setParameter($this->parent_obj, 'order_id', $a_set['id']);
         $this->addActionsToRow($a_set);
-
     }
-
 
     protected function initRowTemplate() {
         $this->setRowTemplate('tpl.table_list_row.html',
@@ -118,7 +115,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->addColumn("url", 'full_url');
         $this->addColumn("shortLink", 'short_link');
         $this->addColumn("user", 'contact_user_login');
-        // Action field
         $this->addColumn('', '', 1);
     }
 
@@ -132,8 +128,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
 
     protected function initToolbar() {
-        global $ilCtrl;
-        $this->ctrl = $ilCtrl;
         $toolbar = new ilToolbarGUI();
         $toolbar->addButton("add", $this->ctrl->getLinkTarget($this->parent_obj, 'add'));
         $this->setToolbar($toolbar);
@@ -143,25 +137,23 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      * @param array $a_set data array
      */
     protected function addActionsToRow($a_set) {
-        global $lng, $ilCtrl;
+        global $lng;
         $this->ctrl->setParameterByClass(get_class($this->parent_obj), 'link_id',  $a_set['id']);
+            if (! empty($this->actions)) {
+                $alist = new ilAdvancedSelectionListGUI();
+                $alist->setId($a_set['id']);
+                $alist->setListTitle($lng->txt('actions', FALSE));
+                $alist->setAutoHide(TRUE);
 
-                if (! empty($this->actions)) {
-                    $alist = new ilAdvancedSelectionListGUI();
-                    $alist->setId($a_set['id']);
-                    $alist->setListTitle($lng->txt('actions', FALSE));
-                    $alist->setAutoHide(TRUE);
-
-                    foreach ($this->actions as $action) {
-
-                        $alist->addItem($action->title, $action->id,
-                            $this->ctrl->getLinkTargetByClass($action->target_class, $action->target_cmd));
+                foreach ($this->actions as $action) {
+                    $alist->addItem($action->title, $action->id,
+                        $this->ctrl->getLinkTargetByClass($action->target_class, $action->target_cmd));
             }
-
             $this->tpl->setVariable('ACTION', $alist->getHTML());
         }
     }
 
+    // TODO: working but wrong
     public function initFilter() {
         require_once('Customizing/global/plugins/Services/Repository/RepositoryObject/Bugeno/classes/Administration/class.xbgTableFilter.php');
         $filter = new xbgTableFilter($this, $this->lng_xbg);
@@ -181,15 +173,21 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         if ($this->getToolbar()) {
             $index_table_tpl->setVariable('TOOLBAR', $this->getToolbar()->getHTML());
         }
-
         $index_table_tpl->setVariable('TABLE', parent::render());
 
         return $index_table_tpl->get();
     }
 
+    /**
+     * @param $toolbar
+     */
     protected function setToolbar($toolbar) {
         $this->toolbar = $toolbar;
     }
+
+    /**
+     * @return ilToolbarGUI
+     */
     protected function getToolbar() {
         return $this->toolbar;
     }
