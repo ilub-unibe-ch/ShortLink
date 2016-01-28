@@ -21,8 +21,7 @@
 	+-----------------------------------------------------------------------------+
 */
 
-require_once('./class.ilShortLinkAccess.php');
-
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php');
 
 
 /**
