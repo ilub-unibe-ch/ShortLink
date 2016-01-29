@@ -112,8 +112,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
     protected function initColumns() {
         $this->addColumn("ID", 'id');
-        $this->addColumn("url", 'full_url');
         $this->addColumn("shortLink", 'short_link');
+        $this->addColumn("url", 'full_url');
         $this->addColumn("user", 'contact_user_login');
         $this->addColumn('', '', 1);
     }
