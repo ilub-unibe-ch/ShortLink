@@ -21,12 +21,9 @@
 	+-----------------------------------------------------------------------------+
 */
 
-class ilShortLinkAccess {
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 
-    /**
-     * @var ilDB $db
-     */
-    protected $db;
+class ilShortLinkAccess {
 
     /**
      * @var ilObjUser $usr
@@ -43,55 +40,43 @@ class ilShortLinkAccess {
      */
     protected $currentUserId;
 
+    /**
+     * @var ilObjShortLink;
+     */
+    protected $obj;
+
 
     public function __construct() {
-        global $ilDB, $ilUser;
+        global $ilUser;
 
-        $this->db = $ilDB;
         $this->usr = $ilUser;
 
         $this->pl = new ilShortLinkPlugin();
+        $this->obj = new ilObjShortLink();
 
         $this->currentUserId = $this->usr->getId();
     }
 
-    // TODO: do I instantiate a new Object or pass it by reference? $this->obj = new ilObjShortLink() in constructor
-
+    /**
+     * Checking the owner of the item for owner and/or admin
+     *
+     * @param ilObjShortLink $obj
+     * @param $idNum
+     */
     public function checkPermission(ilObjShortLink $obj, $idNum) {
-
         $isOwner = $obj->getOwner($idNum) == $this->usr->getLogin();
         $isAdmin = $this->checkAdministrationPrivileges();
-        if($isOwner || $isAdmin) {
-
-        } else {
+        if(!$isOwner && !$isAdmin) {
             ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
             ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
-        };
+        }
     }
 
-    // TODO: Is it ok to have some DB access happening here?
-
+    /**
+     * @return bool
+     */
     public function checkAdministrationPrivileges() {
-        $administrationRole = $this->getRoleIdOfAdministrator();
-        if($administrationRole == -1) {
-            ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
-        } else {
-            $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->currentUserId .' AND rol_id=' . $administrationRole);
-            if($rec = $this->db->fetchAssoc($set)) {
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    public function getRoleIdOfAdministrator() {
-        $set = $this->db->query('SELECT obj_id FROM object_data WHERE title="Administrator" AND type="role"');
-        if($rec = $this->db->fetchAssoc($set)) {
-            return $rec['obj_id'];
-        }
-        return -1;
-    }
+        return $this->obj->checkAdministrationPrivilegesFromDB();
+   }
 
 }

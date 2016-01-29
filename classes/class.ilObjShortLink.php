@@ -42,6 +42,10 @@ class ilObjShortLink {
      */
     protected $usr;
     /**
+     * @var ilShortLinkPlugin $pl
+     */
+    protected $pl;
+    /**
      * @var int $id
      */
     protected $id = 0;
@@ -57,6 +61,10 @@ class ilObjShortLink {
      * @var string $shortLink
      */
     protected $shortLink;
+    /**
+     * @var $currentUserId;
+     */
+    protected $currentUserId;
 
 
     public function __construct() {
@@ -65,8 +73,9 @@ class ilObjShortLink {
         $this->db = $ilDB;
         $this->usr = $ilUser;
 
+        $this->pl = new ilShortLinkPlugin();
 
-        $this->shortLinkAccessChecker = new ilShortLinkAccess();
+        $this->currentUserId = $this->usr->getId();
     }
 
     public function doCreate() {
@@ -89,7 +98,7 @@ class ilObjShortLink {
 
         while ($rec = $this->db->fetchAssoc($set)) {
             if ($as_obj) {
-                if($currentUser == $rec['contact_user_login']){
+                if($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()){
                     $singleEntry[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
                         'contact'=>$rec['contact_user_login']);
                 }
@@ -115,14 +124,10 @@ class ilObjShortLink {
         $currentUser = $this->usr->getLogin();
 
         $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
-        $isAdministrator = $this->shortLinkAccessChecker->checkAdministrationPrivileges($currentUser);
+        $isAdministrator = $this->checkAdministrationPrivilegesFromDB();
         while ($rec = $this->db->fetchAssoc($set)) {
             if ($as_obj) {
-                if($isAdministrator){
-                    $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
-                        'contact'=>$rec['contact_user_login']);
-                }
-                else if($currentUser == $rec['contact_user_login']){
+                if($currentUser == $rec['contact_user_login'] || $isAdministrator){
                     $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
                         'contact'=>$rec['contact_user_login']);
                 }
@@ -164,6 +169,31 @@ class ilObjShortLink {
     public function doDelete($id) {
         $this->db->manipulate('DELETE FROM ' . ilShortLinkPlugin::TABLE_NAME .
             ' WHERE id = ' . $id, 'integer');
+    }
+
+    public function checkAdministrationPrivilegesFromDB() {
+        $administrationRole = $this->getRoleIdOfAdministrator();
+        if($administrationRole == -1) {
+            ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
+            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
+        } else {
+            $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->currentUserId .' AND rol_id=' . $administrationRole);
+            if($rec = $this->db->fetchAssoc($set)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRoleIdOfAdministrator() {
+        $set = $this->db->query('SELECT obj_id FROM object_data WHERE title="Administrator" AND type="role"');
+        if($rec = $this->db->fetchAssoc($set)) {
+            return $rec['obj_id'];
+        }
+        return -1;
     }
 
 
