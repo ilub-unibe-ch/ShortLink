@@ -86,6 +86,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
         // TODO following $ilTabs to LiveVoting... sth must be wrong
         // TODO further below addTab() is no function of $ilTabs....
+        // TODO BUT IT WORKS
         $this->tabs_gui = &$ilTabs;
 
         $this->pl = new ilShortLinkPlugin();
@@ -165,16 +166,50 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     public function save() {
         global $ilUser;
         $this->initConfigurationForm();
-        if($this->form->checkInput()) {
+        if($this->form->checkInput() && $this->checkInputValidity()) {
             $this->externalFeedBlock = new ilObjShortLink();
             $this->externalFeedBlock->nextId();
             $this->externalFeedBlock->setLongURL($this->form->getInput("longUrl"));
             $this->externalFeedBlock->setShortLink($this->form->getInput("shortLink"));
             $this->externalFeedBlock->setContact($ilUser->getLogin());
             $this->externalFeedBlock->doCreate();
+        } else {
+            ilUtil::sendFailure($this->pl->txt("mapping_wrong"), true);
         }
-
         $this->showContent();
+    }
+
+    /**
+     * Checks for input validity
+     *
+     * @return bool
+     */
+    private function checkInputValidity() {
+        $longURLOK = $this->checklongURL();
+        $shortURLOK = $this->checkShortULR();
+
+        if($longURLOK && $shortURLOK) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    private function checklongURL() {
+        $isValid = TRUE;
+        if(strlen($this->form->getInput("longUrl")>100)) {
+            $isValid = FALSE;
+        }
+        return $isValid;
+    }
+
+    private function checkShortULR() {
+        $isValid = TRUE;
+        $regex = "/[a-zA-Z0-9]+/";
+        $result = preg_match($regex, $this->form->getInput("shortLink"));
+        if(!preg_match($regex, $this->form->getInput("shortLink"))) {
+            $isValid = FALSE;
+        }
+        return $isValid;
     }
 
     public function listShortLinks() {

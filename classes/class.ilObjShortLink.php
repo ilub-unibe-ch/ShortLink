@@ -78,6 +78,9 @@ class ilObjShortLink {
         $this->currentUserId = $this->usr->getId();
     }
 
+    /**
+     * Inserts new item into DB
+     */
     public function doCreate() {
         $stmt = $this->db->prepare('INSERT INTO ' . ilShortLinkPlugin::TABLE_NAME .
             ' (id, short_link, full_url, contact_user_login) VALUES (?, ?, ?, ?);',
@@ -146,6 +149,12 @@ class ilObjShortLink {
         );
     }
 
+    /**
+     * Get user login name
+     *
+     * @param $idNum
+     * @return mixed
+     */
     public function getOwner($idNum) {
         $this->setId($idNum);
         $set = $this->db->query('SELECT contact_user_login FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $this->getId());
@@ -153,6 +162,12 @@ class ilObjShortLink {
         return $rec['contact_user_login'];
     }
 
+    /**
+     * Gets longURL from shortURL
+     *
+     * @param $shortLink
+     * @return mixed
+     */
     public function fetchLongURL($shortLink) {
         $set = $this->db->query('SELECT full_url FROM ' .ilShortLinkPlugin::TABLE_NAME . ' WHERE short_link=' . "'" . $shortLink . "'");
         $rec = $this->db->fetchAssoc($set);
@@ -171,6 +186,11 @@ class ilObjShortLink {
             ' WHERE id = ' . $id, 'integer');
     }
 
+    /**
+     * Returns true if Administrator privilege is granted
+     *
+     * @return bool
+     */
     public function checkAdministrationPrivilegesFromDB() {
         $administrationRole = $this->getRoleIdOfAdministrator();
         if($administrationRole == -1) {
