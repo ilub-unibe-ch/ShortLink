@@ -33,6 +33,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilObjShortLink {
 
+
+    // hier wurde etwas verändert
+
     /**
      * @var ilDB $db
      */
