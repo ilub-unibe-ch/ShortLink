@@ -141,6 +141,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
         $this->tabs_gui->activateTab('Test1');
 
+        ilUtil::sendInfo($this->pl->txt('info_box'), true);
+
         $this->my_tpl->setTitle($this->pl->txt('title'));
         $this->listShortLinks();
     }

@@ -17,3 +17,4 @@ success_update_entry#:#Der Eintrag wurde erfolgreich aktualisiert
 shortLink_id#:#shortLink_id
 permission_denied#:#Zugriff verweigert
 mapping_wrong#:#Etwas stimmt mit der Referenzierung ihres Links nicht.
+info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserver.ch/shortlink/"yourShortLink" darauf zugegriffen werden.
