@@ -5,7 +5,7 @@ longUrl#:#full URL
 shortLink#:#ShortLink
 formTitle#:#Create new ShortLink
 add#:#Add
-msg_delete_order#:#Are you sure you want to delete the following shortlink?
+msg_delete_order#:#Are you sure you want to delete the following ShortLink?
 delete#:#Delete
 cancel#:#Cancel
 edit#:#Edit
@@ -16,4 +16,4 @@ update#:#Update
 success_update_entry#:#Your entry has been successfully updated
 shortLink_id#:#shortLink_id
 permission_denied#:#Permission Denied
-mapping_wrong#:#Something went wrong with your reference to the shortLink
+mapping_wrong#:#Something went wrong with your reference to this shortLink
