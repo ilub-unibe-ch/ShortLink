@@ -44,4 +44,4 @@ It is important that the rewrite_mod is enabled (should be already the case).
 
 Add the rewrite to the end of the rewrite rules in the current VHost.conf
 
-RewriteRule ^/shortlink/([a-zA-Z0-9-]+)?$ https://ilias-next.unibe.ch/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]
+RewriteRule \^/shortlink/([a-zA-Z0-9-]+)?$ https://ilias-next.unibe.ch/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]
