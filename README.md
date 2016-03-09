@@ -4,15 +4,8 @@
 
 1. ilias 5.0 or higher
 2. unibe /Customizing/global
-3. Router Patch
-4. CtrlMainMenu Plugin
+3. CtrlMainMenu Plugin
 
-### Router Patch Installation
-
-Checkout the router service from studer-raimann
-
-	git clone https://github.com/studer-raimann/RouterService.git Service/Router
-	
 ### CtrlMainMenu Plugin Installation
 
 Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu
