@@ -67,13 +67,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      * @var ilObjShortLink $externalFeedBlock
      */
     protected $externalFeedBlock;
-    /**
-     * @var $tabs_gui
-     */
-    protected $tabs_gui;
 
     public function __construct() {
-        global $ilCtrl, $tpl, $ilTabs;
+        global $ilCtrl, $tpl;
         $this->ctrl = $ilCtrl;
         $this->form = new ilPropertyFormGUI();
 
@@ -84,13 +80,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->my_tpl = $tpl;
         $this->my_tpl->getStandardTemplate();
 
-        // TODO following $ilTabs to LiveVoting... sth must be wrong
-        // TODO further below addTab() is no function of $ilTabs....
-        // TODO BUT IT WORKS
-        $this->tabs_gui = &$ilTabs;
-
         $this->pl = new ilShortLinkPlugin();
-
     }
 
     /**
@@ -98,7 +88,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     public function executeCommand() {
         $cmd = $this->ctrl->getCmd();
-        $this->setTabs();
 
         switch($cmd){
             case 'add':
@@ -139,19 +128,10 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             $this->obj = new ilObjShortLink();
         }
 
-        $this->tabs_gui->activateTab('Test1');
-
         ilUtil::sendInfo($this->pl->txt('info_box'), true);
 
         $this->my_tpl->setTitle($this->pl->txt('title'));
         $this->listShortLinks();
-    }
-
-    protected function setTabs() {
-        $this->tabs_gui->addTab('Test1', $this->pl->txt('test1'),
-            $this->ctrl->getLinkTarget($this, 'doSomethingOne'));
-        $this->tabs_gui->addTab('Test2', $this->pl->txt('test2'),
-            $this->ctrl->getLinkTarget($this, 'doSomethingTwo'));
     }
 
     protected function initToolbar() {
@@ -272,22 +252,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     }
 
     /**
-     * Stub functions for tab options
-     */
-    protected function doSomethingOne() {
-        var_dump("inside doSomethingOne....");
-        exit;
-    }
-
-    /**
-     * Stub functions for tab options
-     */
-    protected function doSomethingTwo() {
-        var_dump("inside doSomethingTwo....");
-        exit;
-    }
-
-    /**
      * Init Configuration Form
      *
      * @param bool $update
@@ -295,8 +259,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     public function initConfigurationForm($update = FALSE)
     {
-        $this->tabs_gui->activateTab('Test1');
-
         $this->form = new ilPropertyFormGUI();
         $this->form->setFormAction($this->ctrl->getFormAction($this));
         if($update) {
@@ -304,7 +266,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         } else {
             $this->form->setTitle($this->pl->txt('formTitle'));
         }
-
 
         // Text input for long URL
         $ti = new ilTextInputGUI($this->pl->txt("longUrl"), 'longUrl');
