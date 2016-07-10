@@ -177,6 +177,15 @@ class ilObjShortLink {
         return $rec['full_url'];
     }
 
+    public function checkIfShortLinkAlreadyMentioned($shortLink) {
+        $set = $this->db->query('SELECT full_url FROM ' .ilShortLinkPlugin::TABLE_NAME . ' WHERE short_link=' . "'" . $shortLink . "'");
+        $rec = $this->db->fetchAssoc($set);
+        if($rec == NULL)  {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      *

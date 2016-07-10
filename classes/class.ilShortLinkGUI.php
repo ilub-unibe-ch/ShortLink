@@ -175,8 +175,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             $this->externalFeedBlock->setShortLink($this->form->getInput("shortLink"));
             $this->externalFeedBlock->setContact($ilUser->getLogin());
             $this->externalFeedBlock->doCreate();
-        } else {
-            ilUtil::sendFailure($this->pl->txt("mapping_wrong"), true);
         }
         $this->showContent();
     }
@@ -198,7 +196,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
     private function checklongURL() {
         $isValid = TRUE;
-        if(strlen($this->form->getInput("longUrl")>100)) {
+        if(strlen($this->form->getInput("longUrl"))>99) {
+            ilUtil::sendFailure($this->pl->txt("long_url_too_long"), true);
             $isValid = FALSE;
         }
         return $isValid;
@@ -209,6 +208,13 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $regex = "/[a-zA-Z0-9]+/";
         $result = preg_match($regex, $this->form->getInput("shortLink"));
         if(!preg_match($regex, $this->form->getInput("shortLink"))) {
+            ilUtil::sendFailure($this->pl->txt("characters_not_allowed"), true);
+            $isValid = FALSE;
+        }
+        $this->obj = new ilObjShortLink();
+        if($this->obj->checkIfShortLinkAlreadyMentioned($this->form->getInput("shortLink"))) {
+            ilUtil::sendFailure($this->pl->txt("exists_already"), true);
+            //$this->showContent();
             $isValid = FALSE;
         }
         return $isValid;
