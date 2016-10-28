@@ -100,7 +100,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->initRowTemplate();
 
         $this->tpl->setVariable("ID", $a_set['id']);
-        $this->tpl->setVariable("SHORTLINK", $a_set['short_link']);
+        $this->linkToShortURL = $_SERVER['HTTP_HOST'] . "/link/" . $a_set['short_link'];
+        $this->tpl->setVariable("SHORTLINK", $this->linkToShortURL);
         $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
         $this->addActionsToRow($a_set);
