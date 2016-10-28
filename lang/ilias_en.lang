@@ -4,7 +4,7 @@ title#:#ShortLink GUI
 longUrl#:#full URL
 shortLink#:#ShortLink
 formTitle#:#Create new ShortLink
-add#:#Add
+add#:#Add shortlink
 msg_delete_order#:#Are you sure you want to delete the following ShortLink?
 delete#:#Delete
 cancel#:#Cancel

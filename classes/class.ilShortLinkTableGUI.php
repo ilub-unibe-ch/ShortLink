@@ -50,6 +50,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
     public function __construct($a_parent_obj, $a_parent_cmd) {
         global $ilCtrl;
+        $this->pl = new ilShortLinkPlugin();
         $this->ctrl = $ilCtrl;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
@@ -99,8 +100,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->initRowTemplate();
 
         $this->tpl->setVariable("ID", $a_set['id']);
-        $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
         $this->tpl->setVariable("SHORTLINK", $a_set['short_link']);
+        $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
         $this->addActionsToRow($a_set);
     }
@@ -118,18 +119,15 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->addColumn('', '', 1);
     }
 
-
     protected function initActions() {
         global $lng;
-
         $this->addAction('edit', $lng->txt('edit'), get_class($this->parent_obj), 'edit');
         $this->addAction('delete', $lng->txt('delete'), get_class($this->parent_obj), 'delete');
     }
 
-
     protected function initToolbar() {
         $toolbar = new ilToolbarGUI();
-        $toolbar->addButton("add", $this->ctrl->getLinkTarget($this->parent_obj, 'add'));
+        $toolbar->addButton($this->pl->txt('add'), $this->ctrl->getLinkTarget($this->parent_obj, 'add'));
         $this->setToolbar($toolbar);
     }
 

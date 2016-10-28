@@ -4,7 +4,7 @@ title#:#Erstellung eines ShortLinks
 longUrl#:#ursprünglicher Link
 shortLink#:#ShortLink
 formTitle#:#Neuen ShortLink erstellen
-add#:#Hinzufügen
+add#:#Shortlink hinzufügen
 msg_delete_order#:#Sind Sie sicher, dass Sie den Shortlink löschen möchten?
 delete#:#Löschen
 cancel#:#Abbrechen
