@@ -20,4 +20,4 @@ mapping_wrong#:#Etwas stimmt mit der Referenzierung ihres Links nicht.
 exists_already#:#Dieser shortLink Name existiert bereits. Wählen Sie bitte einen anderen Namen für Ihren ShortLink.
 long_url_too_long#:#Die URL ist zu lang. Sie darf maximal 99 Zeichen betragen.
 characters_not_allowed#:#Nur Zeichen und Buchstaben sind im shortLink Namen erlaubt.
-info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserver.ch/shortlink/"yourShortLink" darauf zugegriffen werden.
+info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserver.ch/link/"yourShortLink" darauf zugegriffen werden.
