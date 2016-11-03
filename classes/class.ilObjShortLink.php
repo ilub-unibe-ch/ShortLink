@@ -150,7 +150,7 @@ class ilObjShortLink {
             ' short_link = ' . $this->db->quote($this->getShortLink(), 'text') . ',' .
             ' full_url = ' . $this->db->quote($this->getLongURL(), 'text') . ',' .
             ' customer = ' . $this->db->quote($this->getCustomer(), 'text') .
-            ' WHERE id = ' . $this->db->quote($this->getId(), 'text') . ';'
+            ' WHERE id = ' . $this->db->quote($this->getId(), 'integer') . ';'
         );
     }
 
