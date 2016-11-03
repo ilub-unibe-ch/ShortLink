@@ -64,7 +64,7 @@ class ilShortLinkAccess {
      * @param $idNum
      */
     public function checkPermission(ilObjShortLink $obj, $idNum) {
-        $isOwner = $obj->getOwner($idNum) == $this->usr->getLogin();
+        $isOwner = ($obj->getOwner($idNum) == $this->usr->getLogin());
         $isAdmin = $this->checkAdministrationPrivileges();
         if(!$isOwner && !$isAdmin) {
             ilUtil::sendFailure($this->pl->txt("permission_denied"), true);

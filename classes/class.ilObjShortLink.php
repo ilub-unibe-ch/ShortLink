@@ -33,9 +33,6 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilObjShortLink {
 
-
-    // hier wurde etwas verändert
-
     /**
      * @var ilDB $db
      */
@@ -65,6 +62,10 @@ class ilObjShortLink {
      */
     protected $shortLink;
     /**
+     * @var $customer
+     */
+    protected $customer;
+    /**
      * @var $currentUserId;
      */
     protected $currentUserId;
@@ -86,9 +87,9 @@ class ilObjShortLink {
      */
     public function doCreate() {
         $stmt = $this->db->prepare('INSERT INTO ' . ilShortLinkPlugin::TABLE_NAME .
-            ' (id, short_link, full_url, contact_user_login) VALUES (?, ?, ?, ?);',
-            array('integer', 'text', 'text', 'text'));
-        $this->db->execute($stmt, array($this->getId(), $this->getShortLink(), $this->getLongURL(), $this->getContact()));
+            ' (id, short_link, full_url, customer, contact_user_login) VALUES (?, ?, ?, ?, ?);',
+            array('integer', 'text', 'text', 'text', 'text'));
+        $this->db->execute($stmt, array($this->getId(), $this->getShortLink(), $this->getLongURL(), $this->getCustomer(), $this->getContact()));
     }
 
     /**
@@ -106,7 +107,7 @@ class ilObjShortLink {
             if ($as_obj) {
                 if($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()){
                     $singleEntry[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
-                        'contact'=>$rec['contact_user_login']);
+                        'customer'=>$rec['customer'], 'contact'=>$rec['contact_user_login']);
                 }
             } else {
                 $shortLinks[] = $rec;
@@ -135,7 +136,7 @@ class ilObjShortLink {
             if ($as_obj) {
                 if($currentUser == $rec['contact_user_login'] || $isAdministrator){
                     $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
-                        'contact'=>$rec['contact_user_login']);
+                        'customer'=>$rec['customer'], 'contact'=>$rec['contact_user_login']);
                 }
             } else {
                 $shortLinks[] = $rec;
@@ -147,7 +148,8 @@ class ilObjShortLink {
     public function doUpdate() {
         $this->db->manipulate('UPDATE ' . ilShortLinkPlugin::TABLE_NAME . ' SET' .
             ' short_link = ' . $this->db->quote($this->getShortLink(), 'text') . ',' .
-            ' full_url = ' . $this->db->quote($this->getLongURL(), 'text') .
+            ' full_url = ' . $this->db->quote($this->getLongURL(), 'text') . ',' .
+            ' customer = ' . $this->db->quote($this->getCustomer(), 'text') .
             ' WHERE id = ' . $this->db->quote($this->getId(), 'text') . ';'
         );
     }
@@ -241,6 +243,20 @@ class ilObjShortLink {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * @param $customer
+     */
+    public function setCustomer($customer) {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return string $customer
+     */
+    public function getCustomer() {
+        return $this->customer;
     }
 
     /**

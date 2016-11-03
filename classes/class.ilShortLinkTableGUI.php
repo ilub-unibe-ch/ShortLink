@@ -105,6 +105,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->tpl->setVariable("SHORTLINK", $this->linkToShortURL);
         $this->tpl->setVariable("DOMAIN", $this->domain);
         $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
+        $this->tpl->setVariable("CUSTOMER", $a_set['customer']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
         $this->addActionsToRow($a_set);
     }
@@ -118,6 +119,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->addColumn("ID", 'id');
         $this->addColumn("shortLink", 'short_link');
         $this->addColumn("url", 'full_url');
+        $this->addColumn("customer", 'customer');
         $this->addColumn("user", 'contact_user_login');
         $this->addColumn('', '', 1);
     }

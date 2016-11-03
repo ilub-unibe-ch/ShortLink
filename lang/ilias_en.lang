@@ -21,3 +21,4 @@ exists_already#:#This shortLink name already exists, please choose another one
 long_url_too_long#:#The URL is too long. Maximum of 99 characters allowed
 characters_not_allowed#:#Only letters and numbers in shortLink name allowed
 info_box#:#After saving the ShortLink, it can be reached by typing www.yourILIASserver.ch/link/"yourShortLink"
+customer#:#Customer

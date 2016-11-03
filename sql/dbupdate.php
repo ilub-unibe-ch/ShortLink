@@ -33,3 +33,17 @@ if (! $db->tableExists(ilShortLinkPlugin::TABLE_NAME)) {
     $db->createSequence(ilShortLinkPlugin::TABLE_NAME);
 }
 ?>
+
+<#2>
+<?php
+/** @var ilDB $ilDB */
+global $ilDB;
+$db = $ilDB;
+
+if(! $db->tableColumnExists(ilShortLinkPlugin::TABLE_NAME, 'customer'))
+{
+    $query = "ALTER TABLE " . ilShortLinkPlugin::TABLE_NAME . " ADD COLUMN customer VARCHAR(40) AFTER full_url";
+    $res = $ilDB->query($query);
+}
+
+?>

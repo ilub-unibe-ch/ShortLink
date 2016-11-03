@@ -153,6 +153,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             $this->externalFeedBlock->nextId();
             $this->externalFeedBlock->setLongURL($this->form->getInput("longUrl"));
             $this->externalFeedBlock->setShortLink($this->form->getInput("shortLink"));
+            $this->externalFeedBlock->setCustomer($this->form->getInput("customer"));
             $this->externalFeedBlock->setContact($ilUser->getLogin());
             $this->externalFeedBlock->doCreate();
         }
@@ -212,6 +213,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->obj->setId($id);
         $this->obj->setShortLink($shortLinkEntry[0]['short_link']);
         $this->obj->setLongURL($shortLinkEntry[0]['long_url']);
+        $this->obj->setCustomer($shortLinkEntry[0]['customer']);
         $this->form = $this->initConfigurationForm(TRUE);
         $this->fillForm();
         $this->my_tpl->setContent($this->form->getHTML());
@@ -221,6 +223,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->obj->setId($_POST['shortLink_id']);
         $this->obj->setShortLink($_POST['shortLink']);
         $this->obj->setLongURL($_POST['longUrl']);
+        $this->obj->setCustomer($_POST['customer']);
         $this->obj->doUpdate();
         ilUtil::sendSuccess($this->pl->txt('success_update_entry'), TRUE);
         $this->ctrl->redirect($this, 'showContent');
@@ -281,6 +284,13 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $ti->setSize(10);
         $this->form->addItem($ti);
 
+        // Text input for customer
+        $ti = new ilTextInputGUI($this->pl->txt("customer"), 'customer');
+        $ti->setRequired(true);
+        $ti->setMaxLength(40);
+        $ti->setSize(10);
+        $this->form->addItem($ti);
+
         if($update) {
 
             // HiddenInputGui for id
@@ -304,6 +314,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     protected function fillForm() {
         $values['longUrl'] = $this->obj->getLongURL();
         $values['shortLink'] = $this->obj->getShortLink();
+        $values['customer'] = $this->obj->getCustomer();
         $values['shortLink_id'] = $this->obj->getId();
 
         $this->form->setValuesByArray($values);
