@@ -64,6 +64,10 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
         $this->setEnableHeader(true);
         $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
+
+        $this->setDefaultOrderField("id");
+        $this->setDefaultOrderDirection("asc");
+
         $this->getMyDataFromDb();
         $this->setTitle("Title");
     }
@@ -77,8 +81,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     public function getMyDataFromDb() {
         $this->obj = new ilObjShortLink();
 
-        $this->setDefaultOrderField("id");
-        $this->setDefaultOrderDirection("asc");
         $this->setData($this->obj->readTablesPerUser());
     }
 

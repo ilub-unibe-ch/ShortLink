@@ -135,7 +135,7 @@ class ilObjShortLink {
         while ($rec = $this->db->fetchAssoc($set)) {
             if ($as_obj) {
                 if($currentUser == $rec['contact_user_login'] || $isAdministrator){
-                    $shortLinks[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
+                    $shortLinks[] = array('id'=> (int)$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
                         'customer'=>$rec['customer'], 'contact'=>$rec['contact_user_login']);
                 }
             } else {
