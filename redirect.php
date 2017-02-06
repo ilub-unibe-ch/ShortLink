@@ -14,11 +14,7 @@ if (is_file('path')) {
 chdir($path);
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 require_once("./Services/Init/classes/class.ilInitialisation.php");
-require_once('context/srContext.php');
-require_once('context/srInitialisation.php');
-srInitialisation::setContext(new srContext());
-srInitialisation::initILIAS();
-
+ilInitialisation::initILIAS();
 
 $fetcher = new ilObjShortLink();
 var_dump($_GET['shortlink']);
