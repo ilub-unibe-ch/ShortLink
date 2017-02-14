@@ -209,7 +209,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     public function edit() {
         $id = $_GET['link_id'];
         $this->obj = new ilObjShortLink();
-        $shortLinkEntry = $this->obj->readSingleEntry(TRUE, $id);
+        $shortLinkEntry = $this->obj->readSingleEntry($id);
         $this->obj->setId($id);
         $this->obj->setShortLink($shortLinkEntry[0]['short_link']);
         $this->obj->setLongURL($shortLinkEntry[0]['long_url']);
@@ -241,7 +241,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $id = $_GET['link_id'];
 
         $objShortLink = new ilObjShortLink();
-        $shortLinkEntry = $objShortLink->readSingleEntry(TRUE, $id);
+        $shortLinkEntry = $objShortLink->readSingleEntry($id);
 
         $c_gui->addItem("obj_id", $id, $shortLinkEntry[0]['short_link']);
         $this->my_tpl->setContent($c_gui->getHTML());

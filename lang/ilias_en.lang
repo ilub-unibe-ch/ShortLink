@@ -15,6 +15,7 @@ formUpdateTitle#:#Update ShortLink
 update#:#Update
 success_update_entry#:#Your entry has been successfully updated
 shortLink_id#:#shortLink_id
+request_invalid#:#Your request is invalid (ilObjShortLink->readSingleEntry())
 permission_denied#:#Permission Denied
 mapping_wrong#:#Something went wrong with your reference to this shortLink
 exists_already#:#This shortLink name already exists, please choose another one
