@@ -186,8 +186,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
     private function checkShortULR() {
         $isValid = TRUE;
-        $regex = "/[a-zA-Z0-9]+/";
-        $result = preg_match($regex, $this->form->getInput("shortLink"));
+        $regex = "/^[a-zA-Z0-9]+$/";
         if(!preg_match($regex, $this->form->getInput("shortLink"))) {
             ilUtil::sendFailure($this->pl->txt("characters_not_allowed"), true);
             $isValid = FALSE;
@@ -211,9 +210,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->obj = new ilObjShortLink();
         $shortLinkEntry = $this->obj->readSingleEntry($id);
         $this->obj->setId($id);
-        $this->obj->setShortLink($shortLinkEntry[0]['short_link']);
-        $this->obj->setLongURL($shortLinkEntry[0]['long_url']);
-        $this->obj->setCustomer($shortLinkEntry[0]['customer']);
+        $this->obj->setShortLink($shortLinkEntry['short_link']);
+        $this->obj->setLongURL($shortLinkEntry['long_url']);
+        $this->obj->setCustomer($shortLinkEntry['customer']);
         $this->form = $this->initConfigurationForm(TRUE);
         $this->fillForm();
         $this->my_tpl->setContent($this->form->getHTML());

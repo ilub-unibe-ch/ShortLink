@@ -124,7 +124,7 @@ class ilObjShortLink {
 
         if ($rec = $this->db->fetchAssoc($set)) {
             if ($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()) {
-                $singleEntry[] = array('id' => $rec['id'], 'long_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
+                $singleEntry = array('id' => $rec['id'], 'long_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
                     'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
             }
         } else {
