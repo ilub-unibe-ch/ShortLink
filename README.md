@@ -22,7 +22,7 @@ Configure the plugin, remove the unwanted entries like 'search', 'status' and 's
 Clone the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ and checkout the
 required version you need.
 	
-	git clone http://ilublx3.unibe.ch/kolonko/ShortLink.git
+	git clone https://github.com/iLUB/ShortLink.git
 
 Go to Administration -> Plugins, apply the updates and activate the ShortLink plugin.
 
