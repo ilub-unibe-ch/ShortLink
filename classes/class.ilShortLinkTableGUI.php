@@ -81,11 +81,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     public function getMyDataFromDb() {
         $this->obj = new ilObjShortLink();
 
-        // setExternalSorting was false before
-        $this->setExternalSegmentation(true);
-        $this->setExternalSorting(true);
-
-        // TODO: Sorting might be off because id is int in DB but string in GUI !!!!
         $this->setData($this->obj->readTablesPerUser());
     }
 

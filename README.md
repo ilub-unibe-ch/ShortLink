@@ -8,7 +8,8 @@
 
 ### CtrlMainMenu Plugin Installation
 
-Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu
+Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu and
+checkout the required version you need.
 
 	git clone https://github.com/iLUB/CtrlMainMenu.git
 
@@ -18,9 +19,10 @@ Configure the plugin, remove the unwanted entries like 'search', 'status' and 's
 
 ## Installation of the ShortLink Plugin
 
-Clone the master branch of the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ and checkout the required version you need.
-
-	git clone https://github.com/iLUB/shortlink.git
+Clone the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ and checkout the
+required version you need.
+	
+	git clone http://ilublx3.unibe.ch/kolonko/ShortLink.git
 
 Go to Administration -> Plugins, apply the updates and activate the ShortLink plugin.
 
