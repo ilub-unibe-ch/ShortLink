@@ -36,11 +36,6 @@ class ilShortLinkAccess {
     protected $pl;
 
     /**
-     * @var $currentUserId;
-     */
-    protected $currentUserId;
-
-    /**
      * @var ilObjShortLink;
      */
     protected $obj;
@@ -54,7 +49,6 @@ class ilShortLinkAccess {
         $this->pl = new ilShortLinkPlugin();
         $this->obj = new ilObjShortLink();
 
-        $this->currentUserId = $this->usr->getId();
     }
 
     /**
@@ -77,6 +71,6 @@ class ilShortLinkAccess {
      */
     public function checkAdministrationPrivileges() {
         return $this->obj->checkAdministrationPrivilegesFromDB();
-   }
+    }
 
 }

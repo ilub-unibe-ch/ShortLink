@@ -8,8 +8,7 @@
 
 ### CtrlMainMenu Plugin Installation
 
-Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu and
-checkout the required version you need.
+Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu
 
 	git clone https://github.com/iLUB/CtrlMainMenu.git
 
@@ -19,10 +18,9 @@ Configure the plugin, remove the unwanted entries like 'search', 'status' and 's
 
 ## Installation of the ShortLink Plugin
 
-Clone the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ and checkout the
-required version you need.
-	
-	git clone http://ilublx3.unibe.ch/kolonko/ShortLink.git
+Clone the master branch of the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
+
+	git clone https://github.com/iLUB/shortlink.git
 
 Go to Administration -> Plugins, apply the updates and activate the ShortLink plugin.
 
@@ -45,8 +43,8 @@ It is important that the rewrite_mod is enabled (should be already the case).
 
 Add the rewrite to the end of the rewrite rules in the current VHost.conf
 
-RewriteRule \^/link/([a-zA-Z0-9-]+)?$ https://ilias-next.unibe.ch/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]
+RewriteRule \^/shortlink/([a-zA-Z0-9-]+)?$ https://ilias.yourDomain/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]
 
 If you work on localhost add:
 
-RewriteRule \^/link/([a-zA-Z0-9-]+)?$ http://localhost:8081/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]
+RewriteRule \^/shortlink/([a-zA-Z0-9-]+)?$ http://localhost:80/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/redirect.php?shortlink=$1 [L]

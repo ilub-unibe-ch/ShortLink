@@ -28,6 +28,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * Class ilObjShortLink
  * Object for the ShortLinkPlugin
  *
+ * This class encapsulates the shortlink object with all it's member variables and functions.
+ * It is also responsible for retrieving information from the database and write information to it.
+ *
  * @author  Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version $Id$
  */
@@ -37,40 +40,57 @@ class ilObjShortLink {
      * @var ilDB $db
      */
     protected $db;
+
     /**
      * @var ilObjUser $usr
      */
     protected $usr;
+
     /**
      * @var ilShortLinkPlugin $pl
      */
     protected $pl;
+
     /**
      * @var int $id
      */
     protected $id = 0;
+
     /**
+     * The currently logged in user creating this object
+     *
      * @var string $contact
      */
     protected $contact;
+
     /**
+     * Full URL to the resource.
+     *
      * @var string $longURL
      */
     protected $longURL;
+
     /**
+     * Short expression to substitute the full URL entered by user in browser
+     *
      * @var string $shortLink
      */
     protected $shortLink;
+
     /**
+     * The name of the person requesting the shortlink entered by user in browser.
+     *
      * @var $customer
      */
     protected $customer;
+
+
     /**
-     * @var $currentUserId;
+     * ilObjShortLink constructor
+     *
+     * Makes global DB and User variable locally available trough member variables.
+     * Creates new ilShortLinkPlugin and makes it locally available.
      */
-    protected $currentUserId;
-
-
     public function __construct() {
         global $ilDB, $ilUser;
 
@@ -78,13 +98,12 @@ class ilObjShortLink {
         $this->usr = $ilUser;
 
         $this->pl = new ilShortLinkPlugin();
-
-        $this->currentUserId = $this->usr->getId();
     }
 
     /**
      * Inserts new item into DB
      */
+
     public function doCreate() {
         $stmt = $this->db->prepare('INSERT INTO ' . ilShortLinkPlugin::TABLE_NAME .
             ' (id, short_link, full_url, customer, contact_user_login) VALUES (?, ?, ?, ?, ?);',
@@ -97,22 +116,22 @@ class ilObjShortLink {
      * @param int $id
      * @return array $singleEntry
      */
-    public function readSingleEntry($as_obj = TRUE, $id) {
+    public function readSingleEntry($id) {
         $currentUser = $this->usr->getLogin();
         $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE id=' . $id);
 
         $singleEntry = array();
 
-        while ($rec = $this->db->fetchAssoc($set)) {
-            if ($as_obj) {
-                if($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()){
-                    $singleEntry[] = array('id'=>$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
-                        'customer'=>$rec['customer'], 'contact'=>$rec['contact_user_login']);
-                }
-            } else {
-                $shortLinks[] = $rec;
+        if ($rec = $this->db->fetchAssoc($set)) {
+            if ($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()) {
+                $singleEntry = array('id' => $rec['id'], 'long_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
+                    'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
             }
+        } else {
+            ilUtil::sendFailure($this->pl->txt("request_invalid"), true);
+            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
         }
+
         return $singleEntry;
     }
 
@@ -150,7 +169,7 @@ class ilObjShortLink {
             ' short_link = ' . $this->db->quote($this->getShortLink(), 'text') . ',' .
             ' full_url = ' . $this->db->quote($this->getLongURL(), 'text') . ',' .
             ' customer = ' . $this->db->quote($this->getCustomer(), 'text') .
-            ' WHERE id = ' . $this->db->quote($this->getId(), 'text') . ';'
+            ' WHERE id = ' . $this->db->quote($this->getId(), 'integer') . ';'
         );
     }
 
@@ -211,7 +230,7 @@ class ilObjShortLink {
             ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
             ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
         } else {
-            $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->currentUserId .' AND rol_id=' . $administrationRole);
+            $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->usr->getId() .' AND rol_id=' . $administrationRole);
             if($rec = $this->db->fetchAssoc($set)) {
                 return true;
             }
@@ -276,9 +295,9 @@ class ilObjShortLink {
     /**
      * @param $longURL
      */
-     public function setLongURL($longURL) {
-         $this->longURL = $longURL;
-     }
+    public function setLongURL($longURL) {
+        $this->longURL = $longURL;
+    }
 
     /**
      * @return string $longURL

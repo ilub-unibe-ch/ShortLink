@@ -64,10 +64,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
         $this->setEnableHeader(true);
         $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
-
-        $this->setDefaultOrderField("id");
-        $this->setDefaultOrderDirection("asc");
-
         $this->getMyDataFromDb();
         $this->setTitle("Title");
     }
@@ -81,6 +77,14 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     public function getMyDataFromDb() {
         $this->obj = new ilObjShortLink();
 
+        $this->setDefaultOrderField("id");
+        $this->setDefaultOrderDirection("asc");
+
+        // setExternalSorting was false before
+        $this->setExternalSegmentation(true);
+        $this->setExternalSorting(true);
+
+        // TODO: Sorting might be off because id is int in DB but string in GUI !!!!
         $this->setData($this->obj->readTablesPerUser());
     }
 
@@ -144,15 +148,15 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     protected function addActionsToRow($a_set) {
         global $lng;
         $this->ctrl->setParameterByClass(get_class($this->parent_obj), 'link_id',  $a_set['id']);
-            if (! empty($this->actions)) {
-                $alist = new ilAdvancedSelectionListGUI();
-                $alist->setId($a_set['id']);
-                $alist->setListTitle($lng->txt('actions', FALSE));
-                $alist->setAutoHide(TRUE);
+        if (! empty($this->actions)) {
+            $alist = new ilAdvancedSelectionListGUI();
+            $alist->setId($a_set['id']);
+            $alist->setListTitle($lng->txt('actions', FALSE));
+            $alist->setAutoHide(TRUE);
 
-                foreach ($this->actions as $action) {
-                    $alist->addItem($action->title, $action->id,
-                        $this->ctrl->getLinkTargetByClass($action->target_class, $action->target_cmd));
+            foreach ($this->actions as $action) {
+                $alist->addItem($action->title, $action->id,
+                    $this->ctrl->getLinkTargetByClass($action->target_class, $action->target_cmd));
             }
             $this->tpl->setVariable('ACTION', $alist->getHTML());
         }
