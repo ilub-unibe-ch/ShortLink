@@ -98,7 +98,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'add':
                 if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
                     ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-                    ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
+                    ilUtil::redirect('ilias.php?baseClass=ilrepositorygui');
                     break;
                 }
             case 'save':
