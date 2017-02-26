@@ -103,7 +103,6 @@ class ilObjShortLink {
     /**
      * Inserts new item into DB
      */
-
     public function doCreate() {
         $stmt = $this->db->prepare('INSERT INTO ' . ilShortLinkPlugin::TABLE_NAME .
             ' (id, short_link, full_url, customer, contact_user_login) VALUES (?, ?, ?, ?, ?);',
@@ -124,14 +123,13 @@ class ilObjShortLink {
 
         if ($rec = $this->db->fetchAssoc($set)) {
             if ($currentUser == $rec['contact_user_login'] || $this->checkAdministrationPrivilegesFromDB()) {
-                $singleEntry = array('id' => $rec['id'], 'long_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
+                $singleEntry = array('id' => $rec['id'], 'full_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
                     'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
             }
         } else {
             ilUtil::sendFailure($this->pl->txt("request_invalid"), true);
             ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
         }
-
         return $singleEntry;
     }
 
@@ -140,30 +138,33 @@ class ilObjShortLink {
     }
 
     /**
-     * Get data from DB and put it into an array
+     * Get an array of ShortLinks that are visible for the currently logged in user
      *
      * @param bool $as_obj
      * @return array $shortLinks
      */
-    public function readTablesPerUser($as_obj = TRUE) { // << ?? $as_obj reason?? >>
+    public function readEntriesPerUser() {
         $shortLinks = array();
         $currentUser = $this->usr->getLogin();
 
         $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
+
         $isAdministrator = $this->checkAdministrationPrivilegesFromDB();
+
         while ($rec = $this->db->fetchAssoc($set)) {
-            if ($as_obj) {
-                if($currentUser == $rec['contact_user_login'] || $isAdministrator){
-                    $shortLinks[] = array('id'=> (int)$rec['id'], 'long_url'=>$rec['full_url'], 'short_link'=>$rec['short_link'],
-                        'customer'=>$rec['customer'], 'contact'=>$rec['contact_user_login']);
-                }
-            } else {
-                $shortLinks[] = $rec;
+            if ($currentUser == $rec['contact_user_login'] || $isAdministrator) {
+                $shortLinks[] = array('id' => (int)$rec['id'], 'full_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
+                    'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
             }
         }
         return $shortLinks;
     }
 
+    /**
+     * Updates an entry determined by id with new information
+     *
+     * @param bool $as_obj
+     */
     public function doUpdate() {
         $this->db->manipulate('UPDATE ' . ilShortLinkPlugin::TABLE_NAME . ' SET' .
             ' short_link = ' . $this->db->quote($this->getShortLink(), 'text') . ',' .
@@ -177,7 +178,7 @@ class ilObjShortLink {
      * Get user login name
      *
      * @param $idNum
-     * @return mixed
+     * @return string
      */
     public function getOwner($idNum) {
         $this->setId($idNum);
@@ -190,7 +191,7 @@ class ilObjShortLink {
      * Gets longURL from shortURL
      *
      * @param $shortLink
-     * @return mixed
+     * @return string
      */
     public function fetchLongURL($shortLink) {
         $set = $this->db->query('SELECT full_url FROM ' .ilShortLinkPlugin::TABLE_NAME . ' WHERE short_link=' . "'" . $shortLink . "'");
@@ -198,6 +199,12 @@ class ilObjShortLink {
         return $rec['full_url'];
     }
 
+    /**
+     * Checks if the chosen shortLink name is already taken.
+     *
+     * @param $shortLink
+     * @return boolean
+     */
     public function checkIfShortLinkAlreadyMentioned($shortLink) {
         $set = $this->db->query('SELECT full_url FROM ' .ilShortLinkPlugin::TABLE_NAME . ' WHERE short_link=' . "'" . $shortLink . "'");
         $rec = $this->db->fetchAssoc($set);
@@ -206,7 +213,6 @@ class ilObjShortLink {
         }
         return true;
     }
-
 
     /**
      *
@@ -226,19 +232,16 @@ class ilObjShortLink {
      */
     public function checkAdministrationPrivilegesFromDB() {
         $administrationRole = $this->getRoleIdOfAdministrator();
-        if($administrationRole == -1) {
-            ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
-        } else {
-            $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->usr->getId() .' AND rol_id=' . $administrationRole);
-            if($rec = $this->db->fetchAssoc($set)) {
-                return true;
-            }
+        $set = $this->db->query('SELECT * FROM rbac_ua WHERE usr_id=' . $this->usr->getId() .' AND rol_id=' . $administrationRole);
+        if($rec = $this->db->fetchAssoc($set)) {
+            return true;
         }
         return false;
     }
 
     /**
+     * Returns the id of the Administrators role
+     *
      * @return int
      */
     public function getRoleIdOfAdministrator() {
@@ -249,8 +252,24 @@ class ilObjShortLink {
         return -1;
     }
 
+    /**
+     * Returns true if user is anonymous
+     *
+     * @return boolean
+     */
+    public function checkIfUserIsAnonymous() {
+        $currentUserId = $this->usr->getId();
+        $set = $this->db->query('SELECT * FROM usr_data WHERE login="anonymous"');
+        $rec = $this->db->fetchAssoc($set);
+        if ($rec['usr_id'] == $currentUserId) {
+            return true;
+        }
+        return false;
+    }
 
     /**
+     * Returns true if current User is a valid and registered one.
+     *
      * @param $id
      */
     public function setId($id) {

@@ -23,6 +23,14 @@
 
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 
+/**
+ * Class ilShortLinkAccess
+ *
+ * This class checks the access to the ShortLink object.
+ *
+ * @author  Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
+ * @version $Id$
+ */
 class ilShortLinkAccess {
 
     /**
@@ -40,7 +48,11 @@ class ilShortLinkAccess {
      */
     protected $obj;
 
-
+    /**
+     * ilShortLink constructor
+     *
+     * Fetches the current User and instantiates the ShortLink Plugin and ShortLink Object for access checking.
+     */
     public function __construct() {
         global $ilUser;
 
@@ -67,10 +79,22 @@ class ilShortLinkAccess {
     }
 
     /**
+     * Checking if the user is an administrator
+     *
      * @return bool
      */
     public function checkAdministrationPrivileges() {
         return $this->obj->checkAdministrationPrivilegesFromDB();
+    }
+
+    /**
+     * Checking if the user is a valid registered user
+     *
+     * @return bool
+     */
+    public function checkIfUserIsAnonymous() {
+        return $this->obj->checkIfUserIsAnonymous();
+
     }
 
 }

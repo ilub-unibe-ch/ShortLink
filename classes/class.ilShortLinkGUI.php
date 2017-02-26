@@ -68,19 +68,24 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     protected $externalFeedBlock;
 
+    /**
+     * ilShortLinkGUI constructor
+     *
+     * Instantiates local form, plugin, object and AccessChecker member variables.
+     * Gets the standard template for HTML output.
+     */
     public function __construct() {
         global $ilCtrl, $tpl;
+
         $this->ctrl = $ilCtrl;
+
         $this->form = new ilPropertyFormGUI();
-
         $this->shortLinkAccessChecker = new ilShortLinkAccess();
-
+        $this->pl = new ilShortLinkPlugin();
         $this->obj = new ilObjShortLink();
 
         $this->my_tpl = $tpl;
         $this->my_tpl->getStandardTemplate();
-
-        $this->pl = new ilShortLinkPlugin();
     }
 
     /**
@@ -91,6 +96,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
         switch($cmd){
             case 'add':
+                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
+                    break;
+                }
             case 'save':
                 $this->$cmd();
                 break;
@@ -178,7 +186,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     private function checklongURL() {
         $isValid = TRUE;
         if(strlen($this->form->getInput("longUrl"))>99) {
-            ilUtil::sendFailure($this->pl->txt("long_url_too_long"), true);
+            ilUtil::sendFailure($this->pl->txt("full_url_too_long"), true);
             $isValid = FALSE;
         }
         return $isValid;
@@ -211,7 +219,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $shortLinkEntry = $this->obj->readSingleEntry($id);
         $this->obj->setId($id);
         $this->obj->setShortLink($shortLinkEntry['short_link']);
-        $this->obj->setLongURL($shortLinkEntry['long_url']);
+        $this->obj->setLongURL($shortLinkEntry['full_url']);
         $this->obj->setCustomer($shortLinkEntry['customer']);
         $this->form = $this->initConfigurationForm(TRUE);
         $this->fillForm();

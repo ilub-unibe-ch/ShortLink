@@ -17,6 +17,6 @@ require_once("./Services/Init/classes/class.ilInitialisation.php");
 ilInitialisation::initILIAS();
 
 $fetcher = new ilObjShortLink();
-$long_url = $fetcher->fetchLongURL($_GET['shortlink']);
-ilUtil::redirect($long_url);
+$full_url = $fetcher->fetchLongURL($_GET['shortlink']);
+ilUtil::redirect($full_url);
 exit;
