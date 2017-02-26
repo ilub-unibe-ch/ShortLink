@@ -85,7 +85,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->setExternalSorting(true);
 
         // TODO: Sorting might be off because id is int in DB but string in GUI !!!!
-        $this->setData($this->obj->readTablesPerUser());
+        $this->setData($this->obj->readEntriesPerUser());
     }
 
     /**
@@ -110,7 +110,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->domain = $_SERVER['HTTP_HOST'];
         $this->tpl->setVariable("SHORTLINK", $this->linkToShortURL);
         $this->tpl->setVariable("DOMAIN", $this->domain);
-        $this->tpl->setVariable("LONG_URL", $a_set['long_url']);
+        $this->tpl->setVariable("FULL_URL", $a_set['full_url']);
         $this->tpl->setVariable("CUSTOMER", $a_set['customer']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
         $this->addActionsToRow($a_set);
