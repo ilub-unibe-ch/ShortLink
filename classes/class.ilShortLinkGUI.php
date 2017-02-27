@@ -98,31 +98,30 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
         switch($cmd){
             case 'add':
-                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
-                    ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-                    ilUtil::redirect('ilias.php?baseClass=ilrepositorygui');
-                    break;
-                }
             case 'save':
-                $this->$cmd();
-                break;
             case 'edit':
             case 'delete':
             case 'confirmedDelete':
+            case 'listShortLinks':
+                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
+                    $this->redirectToHome("permission_denied");
+                    break;
+                }
                 $this->$cmd();
                 break;
             case 'doUpdate':
+                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
+                    $this->redirectToHome("permission_denied");
+                    break;
+                }
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
                 } else if($_POST['shortLink_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
                 } else {
-                    ilUtil::sendFailure($this->pl->txt("mapping_wrong"), true);
-                    ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
+                    $this->redirectToHome("mapping wrong");
+                    break;
                 }
-                $this->$cmd();
-                break;
-            case 'listShortLinks':
                 $this->$cmd();
                 break;
             default:
@@ -367,6 +366,14 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $values['shortLink_id'] = $this->obj->getId();
 
         $this->form->setValuesByArray($values);
+    }
+
+    /**
+     * Redirection of the user to Home since access check resulted in not sufficient privilege rights.
+     */
+    protected function redirectToHome(string $text) {
+        ilUtil::sendFailure($this->pl->txt($text), true);
+        ilUtil::redirect('ilias.php?baseClass=ilrepositorygui');
     }
 
     /**
