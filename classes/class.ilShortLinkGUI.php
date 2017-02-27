@@ -103,12 +103,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'delete':
             case 'confirmedDelete':
             case 'listShortLinks':
-                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
-                    $this->redirectToHome("permission_denied");
-                    break;
-                }
-                $this->$cmd();
-                break;
             case 'doUpdate':
                 if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
                     $this->redirectToHome("permission_denied");
@@ -370,10 +364,12 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
     /**
      * Redirection of the user to Home since access check resulted in not sufficient privilege rights.
+     *
+     * @param string $text
      */
-    protected function redirectToHome(string $text) {
+    protected function redirectToHome($text) {
         ilUtil::sendFailure($this->pl->txt($text), true);
-        ilUtil::redirect('ilias.php?baseClass=ilrepositorygui');
+        ilUtil::redirect('goto.php?target=root_1&client_id=ilias3_unibe');
     }
 
     /**
