@@ -147,16 +147,19 @@ class ilObjShortLink {
         $shortLinks = array();
         $currentUser = $this->usr->getLogin();
 
-        $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
-
         $isAdministrator = $this->checkAdministrationPrivilegesFromDB();
 
-        while ($rec = $this->db->fetchAssoc($set)) {
-            if ($currentUser == $rec['contact_user_login'] || $isAdministrator) {
-                $shortLinks[] = array('id' => (int)$rec['id'], 'full_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
-                    'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
-            }
+        if($isAdministrator) {
+            $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME);
+        } else {
+            $set = $this->db->query('SELECT * FROM ' . ilShortLinkPlugin::TABLE_NAME . ' WHERE contact_user_login=' . "'" . $currentUser . "'");
         }
+
+        while ($rec = $this->db->fetchAssoc($set)) {
+           $shortLinks[] = array('id' => (int)$rec['id'], 'full_url' => $rec['full_url'], 'short_link' => $rec['short_link'],
+               'customer' => $rec['customer'], 'contact' => $rec['contact_user_login']);
+        }
+
         return $shortLinks;
     }
 
