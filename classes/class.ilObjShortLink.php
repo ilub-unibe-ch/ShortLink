@@ -128,7 +128,7 @@ class ilObjShortLink {
             }
         } else {
             ilUtil::sendFailure($this->pl->txt("request_invalid"), true);
-            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
+            ilUtil::redirect('goto.php?target=root_1&client_id=ilias3_unibe');
         }
         return $singleEntry;
     }

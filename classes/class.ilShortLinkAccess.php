@@ -74,7 +74,7 @@ class ilShortLinkAccess {
         $isAdmin = $this->checkAdministrationPrivileges();
         if(!$isOwner && !$isAdmin) {
             ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-            ilUtil::redirect('login.php?baseClass=ilPersonalDesktopGUI');
+            ilUtil::redirect('goto.php?target=root_1&client_id=ilias3_unibe');
         }
     }
 
