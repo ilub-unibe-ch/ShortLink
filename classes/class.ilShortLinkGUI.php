@@ -104,10 +104,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'confirmedDelete':
             case 'listShortLinks':
             case 'doUpdate':
-                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
-                    $this->redirectToHome("permission_denied");
-                    break;
-                }
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
                 } else if($_POST['shortLink_id'] != NULL) {
