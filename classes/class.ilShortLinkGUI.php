@@ -109,6 +109,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'edit':
             case 'delete':
             case 'confirmedDelete':
+                $this->$cmd();
+                break;
             case 'doUpdate':
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
@@ -282,7 +284,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $shortLinkEntry = $objShortLink->readSingleEntry($id);
 
         $c_gui->addItem("obj_id", $id, $shortLinkEntry['short_link']);
+
         $this->my_tpl->setContent($c_gui->getHTML());
+
     }
 
     /**
@@ -290,6 +294,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     public function confirmedDelete() {
         $objShortLink = new ilObjShortLink();
+
         $objShortLink->doDelete($_POST['obj_id']);
         ilUtil::sendSuccess($this->pl->txt('success_delete_entry'), TRUE);
         $this->ctrl->redirect($this, 'showContent');
