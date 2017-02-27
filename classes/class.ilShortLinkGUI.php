@@ -105,6 +105,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
                     break;
                 }
                 $this->$cmd();
+                break;
             case 'edit':
             case 'delete':
             case 'confirmedDelete':
