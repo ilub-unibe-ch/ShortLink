@@ -89,6 +89,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
     }
 
     /**
+     * Handles all commands of this class
+     *
      * @return bool
      */
     public function executeCommand() {
@@ -110,8 +112,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'doUpdate':
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
-                } else if($_POST['obj_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['obj_id']);
                 } else if($_POST['shortLink_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
                 } else {
@@ -130,6 +130,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->my_tpl->show();
     }
 
+    /**
+     * Prepares the main layout with the infobox and lists all ShortLinks
+     */
     protected function showContent(){
         $this->initToolbar();
 
@@ -144,6 +147,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->listShortLinks();
     }
 
+    /**
+     * Initializes the toolbar and adds an "add" button.
+     */
     protected function initToolbar() {
         $toolbar = new ilToolbarGUI();
         $toolbar->addButton($this->pl->txt('add'), $this->ctrl->getLinkTarget($this, 'add'));
@@ -155,6 +161,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->my_tpl->setContent($this->form->getHTML());
     }
 
+    /**
+     * Saves all the information given in the form to a new ShortLink Object and adds it to the DB
+     */
     public function save() {
         global $ilUser;
         $this->initConfigurationForm();
@@ -185,6 +194,11 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         return FALSE;
     }
 
+    /**
+     * Returns true if the length of the full url does not exceed the maximum.
+     *
+     * @return bool
+     */
     private function checklongURL() {
         $isValid = TRUE;
         if(strlen($this->form->getInput("longUrl"))>99) {
@@ -194,6 +208,12 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         return $isValid;
     }
 
+    /**
+     * Returns true if only allowed characters are used for the shortlink && the shortlink has not been
+     * used already.
+     *
+     * @return bool
+     */
     private function checkShortULR() {
         $isValid = TRUE;
         $regex = "/^[a-zA-Z0-9]+$/";
@@ -210,11 +230,17 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         return $isValid;
     }
 
+    /**
+     * Initialzes new tableGUI layout and populates it with data from the DB
+     */
     public function listShortLinks() {
         $table = new ilShortLinkTableGUI($this, ilShortLinkPlugin::TABLE_NAME);
         $this->my_tpl->setContent($table->getHTML());
     }
 
+    /**
+     * Creates new ShortLink object to be edited inside form
+     */
     public function edit() {
         $id = $_GET['link_id'];
         $this->obj = new ilObjShortLink();
@@ -228,6 +254,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $this->my_tpl->setContent($this->form->getHTML());
     }
 
+    /**
+     * updates the DB with edited information from the form
+     */
     public function doUpdate() {
         $this->obj->setId($_POST['shortLink_id']);
         $this->obj->setShortLink($_POST['shortLink']);
@@ -252,10 +281,13 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $objShortLink = new ilObjShortLink();
         $shortLinkEntry = $objShortLink->readSingleEntry($id);
 
-        $c_gui->addItem("obj_id", $id, $shortLinkEntry[0]['short_link']);
+        $c_gui->addItem("obj_id", $id, $shortLinkEntry['short_link']);
         $this->my_tpl->setContent($c_gui->getHTML());
     }
 
+    /**
+     * Deletes the shortLink entry and redirects to main shortlink content page
+     */
     public function confirmedDelete() {
         $objShortLink = new ilObjShortLink();
         $objShortLink->doDelete($_POST['obj_id']);
@@ -320,6 +352,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         return $this->form;
     }
 
+    /**
+     * Fills the form from $this->obj
+     */
     protected function fillForm() {
         $values['longUrl'] = $this->obj->getLongURL();
         $values['shortLink'] = $this->obj->getShortLink();

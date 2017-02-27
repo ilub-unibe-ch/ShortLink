@@ -23,12 +23,13 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      */
     protected $access;
 
-
+    /**
+     * ilShortLinkUIHookGUI constructor
+     *
+     */
     function __construct() {
         global $ilCtrl, $ilTabs, $ilAccess;
-        /**
-         * @var $ilCtrl ilCtrl
-         */
+
         $this->ctrl = $ilCtrl;
         $this->tabs = $ilTabs;
         $this->access = $ilAccess;

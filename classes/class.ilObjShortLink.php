@@ -258,10 +258,8 @@ class ilObjShortLink {
      * @return boolean
      */
     public function checkIfUserIsAnonymous() {
-        $currentUserId = $this->usr->getId();
-        $set = $this->db->query('SELECT * FROM usr_data WHERE login="anonymous"');
-        $rec = $this->db->fetchAssoc($set);
-        if ($rec['usr_id'] == $currentUserId) {
+        $currentUserIsAnonymous = $this->usr->isAnonymous();
+        if($currentUserIsAnonymous) {
             return true;
         }
         return false;

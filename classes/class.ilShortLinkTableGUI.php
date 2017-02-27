@@ -27,27 +27,47 @@ require_once('Services/Table/classes/class.ilTable2GUI.php');
  * TableGUI for ShortLink.
  * Lists ShortLinks
  *
- * @author  Tomasz Kolonko <tz.kolonko@gmail.com>
+ * @author  Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version $Id$
  */
 class ilShortLinkTableGUI extends ilTable2GUI {
+
     /**
      * @var ilToolbarGUI
      */
     public $toolbar;
+
     /**
      * @var array
      */
     protected $actions = array();
+
     /**
      * @var ilCtrl $ctrl
      */
     protected $ctrl;
+
     /**
      * @var ilObjShortLink $obj
      */
     protected $obj;
 
+    /**
+     * @var ilShortLinkPlugin $pl
+     */
+    protected $pl;
+
+    /**
+     * @var string $linkToShortURL
+     */
+    protected $linkToShortURL;
+
+    /**
+     * ilShortLinkTableGUI constructor
+     *
+     * @param ilShortLinkGUI    $a_parent_obj   the ShortLink main GUI
+     * @param string            $a_parent_cmd   the table name ilShortLinkPlugin::TABLE_NAME
+     */
     public function __construct($a_parent_obj, $a_parent_cmd) {
         global $ilCtrl;
         $this->pl = new ilShortLinkPlugin();
@@ -89,6 +109,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     }
 
     /**
+     * Adds different actions to the GUI
+     *
      * @param string    $id             the action identifier
      * @param string    $title          the action text
      * @param string    $target_class   the receiving class name
@@ -102,25 +124,35 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->actions[$id]->target_cmd = $target_cmd;
     }
 
+    /**
+     * Fills the single rows by id
+     *
+     * @param array $a_set
+     */
     protected function fillRow($a_set) {
         $this->initRowTemplate();
 
         $this->tpl->setVariable("ID", $a_set['id']);
         $this->linkToShortURL = "/link/" . $a_set['short_link'];
-        $this->domain = $_SERVER['HTTP_HOST'];
         $this->tpl->setVariable("SHORTLINK", $this->linkToShortURL);
-        $this->tpl->setVariable("DOMAIN", $this->domain);
+        $this->tpl->setVariable("DOMAIN", $_SERVER['HTTP_HOST']);
         $this->tpl->setVariable("FULL_URL", $a_set['full_url']);
         $this->tpl->setVariable("CUSTOMER", $a_set['customer']);
         $this->tpl->setVariable("CONTACT", $a_set['contact']);
         $this->addActionsToRow($a_set);
     }
 
+    /**
+     * sets the template used for creating the rows
+     */
     protected function initRowTemplate() {
         $this->setRowTemplate('tpl.table_list_row.html',
             'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink');
     }
 
+    /**
+     * Creates the lables for the columns in the table GUI for the ShortLink plugin
+     */
     protected function initColumns() {
         $this->addColumn("ID", 'id');
         $this->addColumn("shortLink", 'short_link');
@@ -130,12 +162,18 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->addColumn('', '', 1);
     }
 
+    /**
+     * Adds edit and delete actions to every ShortLink row entry
+     */
     protected function initActions() {
         global $lng;
         $this->addAction('edit', $lng->txt('edit'), get_class($this->parent_obj), 'edit');
         $this->addAction('delete', $lng->txt('delete'), get_class($this->parent_obj), 'delete');
     }
 
+    /**
+     * Initializes the toolbar with an add button to add new ShortLinks
+     */
     protected function initToolbar() {
         $toolbar = new ilToolbarGUI();
         $toolbar->addButton($this->pl->txt('add'), $this->ctrl->getLinkTarget($this->parent_obj, 'add'));
@@ -143,6 +181,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     }
 
     /**
+     * Adds the drop down Action Button to ever single ShortLink
+     *
      * @param array $a_set data array
      */
     protected function addActionsToRow($a_set) {
@@ -162,8 +202,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         }
     }
 
-    // TODO: working but wrong
-    public function initFilter() {
+    // TODO: NOT WORKING AT ALL NEEDS FIXING
+    /*public function initFilter() {
         require_once('Customizing/global/plugins/Services/Repository/RepositoryObject/Bugeno/classes/Administration/class.xbgTableFilter.php');
         $filter = new xbgTableFilter($this, $this->lng_xbg);
         foreach ($filter->getFilterInputItems() as $item) {
