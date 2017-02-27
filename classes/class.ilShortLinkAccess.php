@@ -86,4 +86,15 @@ class ilShortLinkAccess {
     public function checkAdministrationPrivileges() {
         return $this->obj->checkAdministrationPrivilegesFromDB();
     }
+
+    /**
+     * Checking if the user is a valid registered user
+     *
+     * @return bool
+     */
+    public function checkIfUserIsAnonymous() {
+        return $this->obj->checkIfUserIsAnonymous();
+
+    }
+
 }

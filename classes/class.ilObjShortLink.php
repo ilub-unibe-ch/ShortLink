@@ -256,6 +256,19 @@ class ilObjShortLink {
     }
 
     /**
+     * Returns true if user is anonymous
+     *
+     * @return boolean
+     */
+    public function checkIfUserIsAnonymous() {
+        $currentUserIsAnonymous = $this->usr->isAnonymous();
+        if($currentUserIsAnonymous) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns true if current User is a valid and registered one.
      *
      * @param $id

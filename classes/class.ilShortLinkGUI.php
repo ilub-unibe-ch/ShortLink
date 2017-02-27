@@ -99,17 +99,22 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         switch($cmd){
             case 'add':
             case 'save':
+            case 'listShortLinks':
+                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
+                    $this->redirectToHome("permission_denied");
+                    break;
+                }
+                $this->$cmd();
             case 'edit':
             case 'delete':
             case 'confirmedDelete':
-            case 'listShortLinks':
             case 'doUpdate':
                 if($_GET['link_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
                 } else if($_POST['shortLink_id'] != NULL) {
                     $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
                 } else {
-                    $this->redirectToHome("mapping wrong");
+                    $this->redirectToHome("mapping_wrong");
                     break;
                 }
                 $this->$cmd();
