@@ -1,6 +1,6 @@
 <?php
 $id = 'shortlink';
-$version = '1.0.1';
+$version = '1.0.2';
 $ilias_min_version = '4.3.0';
 $ilias_max_version = '5.2.999';
 $responsible = 'Tomasz Kolonko';

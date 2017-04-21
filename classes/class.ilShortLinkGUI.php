@@ -371,7 +371,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     protected function checkReadPermissions() {
         if($this->shortLinkAccessChecker->checkIfUserIsAnonymous() ||
-            !$this->obj->checkAdministrationPrivilegesFromDB()) {
+            $this->obj->checkAdministrationPrivilegesFromDB()) {
             return false;
         }
         return true;
