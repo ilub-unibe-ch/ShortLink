@@ -100,7 +100,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'add':
             case 'save':
             case 'listShortLinks':
-                if($this->shortLinkAccessChecker->checkIfUserIsAnonymous()) {
+                if(!$this->checkReadPermissions()) {
                     $this->redirectToHome("permission_denied");
                     break;
                 }
@@ -110,11 +110,11 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'delete':
             case 'confirmedDelete':
             case 'doUpdate':
-                if($_GET['link_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
-                } else if($_POST['shortLink_id'] != NULL) {
-                    $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
-                } else {
+                if(!$this->checkReadPermissions()) {
+                    $this->redirectToHome("permission_denied");
+                    break;
+                }
+                if($this->checkWritePermissions()) {
                     $this->redirectToHome("mapping_wrong");
                     break;
                 }
@@ -362,6 +362,35 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
         $values['shortLink_id'] = $this->obj->getId();
 
         $this->form->setValuesByArray($values);
+    }
+
+    /**
+     * Checks if user has permission to read shortlinks
+     *
+     * @return bool
+     */
+    protected function checkReadPermissions() {
+        if($this->shortLinkAccessChecker->checkIfUserIsAnonymous() ||
+            !$this->obj->checkAdministrationPrivilegesFromDB()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if user has permissions to write and edit shortlinks
+     *
+     * @return bool
+     */
+    protected function checkWritePermissions() {
+        if($_GET['link_id'] != NULL) {
+            $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
+        } else if($_POST['shortLink_id'] != NULL) {
+            $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
+        } else {
+            return false;
+        }
+        return true;
     }
 
     /**
