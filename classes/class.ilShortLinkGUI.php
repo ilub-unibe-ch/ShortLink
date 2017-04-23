@@ -100,6 +100,8 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'add':
             case 'save':
             case 'listShortLinks':
+            case 'confirmedDelete':
+
                 if(!$this->checkReadPermissions()) {
                     $this->redirectToHome("permission_denied");
                     break;
@@ -108,7 +110,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
                 break;
             case 'edit':
             case 'delete':
-            case 'confirmedDelete':
             case 'doUpdate':
                 if(!$this->checkReadPermissions()) {
                     $this->redirectToHome("permission_denied");
