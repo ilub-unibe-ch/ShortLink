@@ -114,7 +114,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
                     $this->redirectToHome("permission_denied");
                     break;
                 }
-                if($this->checkWritePermissions()) {
+                if(!$this->checkWritePermissions()) {
                     $this->redirectToHome("mapping_wrong");
                     break;
                 }
@@ -371,7 +371,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     protected function checkReadPermissions() {
         if($this->shortLinkAccessChecker->checkIfUserIsAnonymous() ||
-            $this->obj->checkAdministrationPrivilegesFromDB()) {
+            !$this->obj->checkAdministrationPrivilegesFromDB()) {
             return false;
         }
         return true;
