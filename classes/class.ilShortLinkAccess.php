@@ -64,18 +64,20 @@ class ilShortLinkAccess {
     }
 
     /**
-     * Checking the owner of the item for owner and/or admin
+     * Checking if the current user is owner OR admin. Returns true if the user is either the owner of
+     * the shortlink or administrator
      *
      * @param ilObjShortLink $obj
      * @param $idNum
+     * @return boolean
      */
     public function checkPermission(ilObjShortLink $obj, $idNum) {
         $isOwner = ($obj->getOwner($idNum) == $this->usr->getLogin());
         $isAdmin = $this->checkAdministrationPrivileges();
-        if(!$isOwner && !$isAdmin) {
-            ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-            ilUtil::redirect('goto.php?target=root_1&client_id=ilias3_unibe');
+        if($isOwner || $isAdmin) {
+            return true;
         }
+        return false;
     }
 
     /**

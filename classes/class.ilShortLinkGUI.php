@@ -101,7 +101,6 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
             case 'save':
             case 'listShortLinks':
             case 'confirmedDelete':
-
                 if(!$this->checkReadPermissions()) {
                     $this->redirectToHome("permission_denied");
                     break;
@@ -384,14 +383,13 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      * @return bool
      */
     protected function checkWritePermissions() {
-        if($_GET['link_id'] != NULL) {
-            $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id']);
-        } else if($_POST['shortLink_id'] != NULL) {
-            $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id']);
-        } else {
-            return false;
+        if($_GET['link_id'] != NULL && $this->shortLinkAccessChecker->checkPermission($this->obj, $_GET['link_id'])) {
+            return true;
+        } else if($_POST['shortLink_id'] != NULL && $this->shortLinkAccessChecker->checkPermission($this->obj, $_POST['shortLink_id'])) {
+            return true;
         }
-        return true;
+        return false;
+
     }
 
     /**
