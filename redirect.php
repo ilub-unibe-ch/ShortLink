@@ -15,11 +15,36 @@ if (is_file('path')) {
 }
 
 chdir($path);
+
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/Services/class.ilShortLinkContextInitialization.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
+
+/**
+ * Initialization of the ShortLink Context, that allows to enter the shortlink without being logged into ILIAS. If user is not logged in yet she
+ * will be redirected to the loging page. If the user is logged in, she will get redirected to the page, if it exists.
+ */
+ilShortLinkContextInitialization::init();
+
+
 require_once("./Services/Init/classes/class.ilInitialisation.php");
 ilInitialisation::initILIAS();
 
+
 $fetcher = new ilObjShortLink();
+$plugin = new ilShortLinkPlugin();
+
 $full_url = $fetcher->fetchLongURL($_GET['shortlink']);
-ilUtil::redirect($full_url);
+
+if($full_url == NULL) {
+
+    include_once('./Services/Utilities/classes/class.ilUtil.php');
+    ilUtil::sendFailure($plugin->txt('link_not_found'), TRUE);
+    ilUtil::sendInfo($plugin->txt('link_not_found'), TRUE);
+    $redirectToHome = 'https://' . $_SERVER[HTTP_HOST] . '/goto.php?target=root_1&client_id=ilias3_unibe';
+    ilUtil::redirect($redirectToHome);
+} else {
+    ilUtil::redirect($full_url);
+}
+
 exit;
