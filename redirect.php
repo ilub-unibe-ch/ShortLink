@@ -30,7 +30,6 @@ ilShortLinkContextInitialization::init();
 require_once("./Services/Init/classes/class.ilInitialisation.php");
 ilInitialisation::initILIAS();
 
-
 $fetcher = new ilObjShortLink();
 $plugin = new ilShortLinkPlugin();
 
@@ -39,8 +38,8 @@ $full_url = $fetcher->fetchLongURL($_GET['shortlink']);
 if($full_url == NULL) {
     include_once('./Services/Utilities/classes/class.ilUtil.php');
     ilUtil::sendFailure($plugin->txt('link_not_found'), TRUE);
-    $redirectToHome = 'https://' . $_SERVER[HTTP_HOST] . '/goto.php?target=root_1&client_id=ilias3_unibe';
-    ilUtil::redirect($redirectToHome);
+    $redirectToOverview = 'https://' . $_SERVER[HTTP_HOST] . '/ilias.php?baseClass=ilPersonalDesktopGUI&cmd=jumpToSelectedItems';
+    ilUtil::redirect($redirectToOverview);
 } else {
     ilUtil::redirect($full_url);
 }
