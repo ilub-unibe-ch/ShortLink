@@ -13,14 +13,12 @@ require_once('./Services/Context/classes/class.ilContextBase.php');
  * @author  Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version $Id$
  */
-class ilShortLinkContextInitialization {
-    const SHORTLINK = 8;
-
+class ilShortLinkContextInitialization extends ilContext {
     /**
      * Initialization of a existing context (CONTEXT_WEB_ACCESS_CHECK)
      */
     public static function init() {
-        ilContext::init(ilShortLinkContextInitialization::SHORTLINK);
+        parent::init(ilContext::CONTEXT_WEB_ACCESS_CHECK);
     }
 
 }
