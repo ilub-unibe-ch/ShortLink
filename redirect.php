@@ -25,6 +25,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * will be redirected to the loging page. If the user is logged in, she will get redirected to the page, if it exists.
  */
 ilShortLinkContextInitialization::init();
+define(CLIENT_ID, "ilias3_unibe");
 
 
 require_once("./Services/Init/classes/class.ilInitialisation.php");

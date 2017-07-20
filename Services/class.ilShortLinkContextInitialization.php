@@ -1,7 +1,6 @@
 <?php
 
 require_once("./Services/Context/classes/class.ilContext.php");
-require_once('./Services/Context/classes/class.ilContextBase.php');
 
 
 /**
