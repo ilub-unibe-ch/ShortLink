@@ -213,9 +213,9 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     private function checkShortULR() {
         $isValid = TRUE;
-        $regex = "/^[a-zA-Z0-9]+$/";
+        $regex = "/^[a-zA-Z0-9\-_]+$/";
         if(!preg_match($regex, $this->form->getInput("shortLink"))) {
-            ilUtil::sendFailure($this->pl->txt("characters_not_allowed"), true);
+            ilUtil::sendFailure($this->pl->txt("characters_not_allowed") . ", used regex: " . $regex, true);
             $isValid = FALSE;
         }
         $this->obj = new ilObjShortLink();
