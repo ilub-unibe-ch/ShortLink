@@ -22,9 +22,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
 
 /**
  * Initialization of the ShortLink Context, that allows to enter the shortlink without being logged into ILIAS. If user is not logged in yet she
- * will be redirected to the loging page. If the user is logged in, she will get redirected to the page, if it exists.
+ * will be redirected to the logging page. If the user is logged in, she will get redirected to the page, if it exists.
  */
-ilShortLinkContextInitialization::init();
+ilShortLinkContextInitialization::init(ilShortLinkContextInitialization::CONTEXT_WAC);
 define(CLIENT_ID, "ilias3_unibe");
 
 
