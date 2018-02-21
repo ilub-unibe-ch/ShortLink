@@ -2,6 +2,9 @@
 require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php');
 
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkGUI.php');
+
+
 /**
  * Class ilShortLinkUIHookGUI
  *
@@ -22,6 +25,10 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      * @var ilAccessHandler
      */
     protected $access;
+    /**
+     * @var ilShortLinkGUI
+     */
+    protected $pl;
 
     /**
      * ilShortLinkUIHookGUI constructor
@@ -33,5 +40,28 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
         $this->ctrl = $ilCtrl;
         $this->tabs = $ilTabs;
         $this->access = $ilAccess;
+    }
+
+    /**
+     * Forwards the flow of control to the ShortLink Plugin and exits afterwards.
+     *
+     * Used URL is: ILIAS.ch/goto.php?target=ShortLink
+     * The exit(); is needed to stop further processing within the goto.php file of ILIAS
+     * since later on a redirect is performed and header() function is called again which leads
+     * to headers already sent warning.
+     */
+    public function gotoHook() {
+        if (preg_match("/^ShortLink(.*)/", $_GET['target'], $matches)) {
+
+            $next_class = "ilshortlinkgui";
+            $class_file = $this->ctrl->lookupClassPath($next_class);
+
+            include_once($class_file);
+
+            $gui = new $next_class();
+
+            $this->ctrl->forwardCommand($gui);
+            exit();
+        }
     }
 }
