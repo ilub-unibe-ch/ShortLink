@@ -24,3 +24,4 @@ characters_not_allowed#:#Nur Zeichen, Buchstaben und Bindestriche sind im ShortL
 info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserver.ch/link/"yourShortLink" darauf zugegriffen werden.
 customer#:#Kunde
 link_not_found#:#Der von Ihnen eingegebene ShortLink existiert nicht.
+cmdNode_not_found#:#Der cmdNode konnte für das ShortLink Plugin nicht gefunden werden:

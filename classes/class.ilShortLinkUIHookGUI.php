@@ -1,8 +1,7 @@
 <?php
 require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php');
-
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkGUI.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
 
 
 /**
@@ -26,9 +25,14 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      */
     protected $access;
     /**
-     * @var ilShortLinkGUI
+     * @var ilShortLinkPlugin $pl
      */
     protected $pl;
+    /**
+     * @var ilObjShortLink
+     */
+    protected $objShortLink;
+
 
     /**
      * ilShortLinkUIHookGUI constructor
@@ -40,28 +44,24 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
         $this->ctrl = $ilCtrl;
         $this->tabs = $ilTabs;
         $this->access = $ilAccess;
+
+        $this->pl = new ilShortLinkPlugin();
+        $this->objShortLink = new ilObjShortLink();
     }
 
     /**
-     * Forwards the flow of control to the ShortLink Plugin and exits afterwards.
-     *
-     * Used URL is: ILIAS.ch/goto.php?target=ShortLink
-     * The exit(); is needed to stop further processing within the goto.php file of ILIAS
-     * since later on a redirect is performed and header() function is called again which leads
-     * to headers already sent warning.
+     * Redirects the user to the ShortLink Plugin if cmdNode is found. Otherwise
+     * the user is redirected to ilPersonalDesktopGUI and an error message is shown.
      */
     public function gotoHook() {
         if (preg_match("/^ShortLink(.*)/", $_GET['target'], $matches)) {
-
-            $next_class = "ilshortlinkgui";
-            $class_file = $this->ctrl->lookupClassPath($next_class);
-
-            include_once($class_file);
-
-            $gui = new $next_class();
-
-            $this->ctrl->forwardCommand($gui);
-            exit();
+            $cmdNode = $this->objShortLink->getCurrentShortLinkCmdNode();
+            if($cmdNode !== "00:00") {
+                ilUtil::redirect('ilias.php?cmdClass=ilshortlinkgui&cmdNode=' . $cmdNode . '&baseClass=iluipluginroutergui');
+            } else {
+                ilUtil::sendFailure($this->pl->txt("cmdNode_not_found") . ' ' . $cmdNode, true);
+                ilUtil::redirect('ilias.php?baseClass=ilPersonalDesktopGUI');
+            }
         }
     }
 }

@@ -64,6 +64,10 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
      */
     protected $form;
     /**
+     * @var ilShortLinkPlugin $pl
+     */
+    protected $pl;
+    /**
      * @var ilObjShortLink $externalFeedBlock
      */
     protected $externalFeedBlock;

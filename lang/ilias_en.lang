@@ -24,3 +24,4 @@ characters_not_allowed#:#Only letters, numbers and hyphens are in ShortLink name
 info_box#:#After saving the ShortLink, it can be reached by typing www.yourILIASserver.ch/link/"yourShortLink"
 customer#:#Customer
 link_not_found#:#The ShortLink you entered, does not exist.
+cmdNode_not_found#:#The requested cmdNode for the ShortLink plugin could not found:
