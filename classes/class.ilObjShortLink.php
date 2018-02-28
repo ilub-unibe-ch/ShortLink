@@ -269,25 +269,6 @@ class ilObjShortLink {
     }
 
     /**
-     * Finds the cid's of the ilUIPluginRouterGUI and the ilShortLinkGUI and concatenates them
-     * for the cmdNode.
-     *
-     * @return string
-     */
-    public function getCurrentShortLinkCmdNode() {
-        $ilUIPluginRouterGUI_record = $this->db->query('SELECT cid FROM ctrl_classfile WHERE class="iluipluginroutergui"');
-        $ilUIPluginRouterGUI_cid = $this->db->fetchAssoc($ilUIPluginRouterGUI_record)['cid'];
-
-        $ilShortLinkGUI_record = $this->db->query('SELECT cid FROM ctrl_classfile WHERE class="ilshortlinkgui"');
-        $ilShortLinkGUI_cid = $this->db->fetchAssoc($ilShortLinkGUI_record)['cid'];
-
-        if($ilUIPluginRouterGUI_cid && $ilShortLinkGUI_cid) {
-            return $ilUIPluginRouterGUI_cid . ':' . $ilShortLinkGUI_cid;
-        }
-        return '00:00';
-    }
-
-    /**
      * Returns true if current User is a valid and registered one.
      *
      * @param $id
