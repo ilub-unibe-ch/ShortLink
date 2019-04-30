@@ -1,0 +1,27 @@
+Test1#:#Test 1
+Test2#:#Test 2
+title#:#Erstellung eines ShortLinks
+longUrl#:#ursprünglicher Link
+shortLink#:#ShortLink
+formTitle#:#Neuen ShortLink erstellen
+add#:#Shortlink hinzufügen
+msg_delete_order#:#Sind Sie sicher, dass Sie den ShortLink löschen möchten?
+delete#:#Löschen
+cancel#:#Abbrechen
+edit#:#Editieren
+save#:#Speichern
+success_delete_entry#:#Der Eintrag wurde erfolgreich gelöscht
+formUpdateTitle#:#Shortlink aktualisieren
+update#:#Aktualisieren
+success_update_entry#:#Der Eintrag wurde erfolgreich aktualisiert
+shortLink_id#:#shortLink_id
+request_invalid#:#Der Eintrag konnte nicht gefunden werden (ilObjShortLink->readSingleEntry()).
+permission_denied#:#Zugriff verweigert
+mapping_wrong#:#Etwas stimmt mit der Referenzierung ihres Links nicht.
+exists_already#:#Dieser shortLink Name existiert bereits. Wählen Sie bitte einen anderen Namen für Ihren ShortLink.
+full_url_too_long#:#Die URL ist zu lang. Sie darf maximal 99 Zeichen betragen.
+characters_not_allowed#:#Nur Zeichen, Buchstaben und Bindestriche sind im ShortLink Namen erlaubt.
+info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserver.ch/link/"yourShortLink" darauf zugegriffen werden.
+customer#:#Kunde
+link_not_found#:#Der von Ihnen eingegebene ShortLink existiert nicht.
+cmdNode_not_found#:#Der cmdNode konnte für das ShortLink Plugin nicht gefunden werden:
