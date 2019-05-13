@@ -68,7 +68,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     /**
      * ilShortLinkTableGUI constructor
      *
-     * @param ilShortLinkGUI    $a_parent_obj   the ShortLink main GUI
+     * @param ilShortLinkConfigGUI    $a_parent_obj   the ShortLink main GUI
      * @param string            $a_parent_cmd   the table name ilShortLinkPlugin::TABLE_NAME
      */
     public function __construct($a_parent_obj, $a_parent_cmd) {

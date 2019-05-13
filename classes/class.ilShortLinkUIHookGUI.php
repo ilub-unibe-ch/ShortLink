@@ -2,12 +2,14 @@
 require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
+include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php');
 
 /**
  * Class ilShortLinkUIHookGUI
  *
  * @author  Thomas Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version 0.0.1
+ * @ilCtrl_Calls ilShortLinkGUI: ilUIPluginRouterGUI
  *
  */
 class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
@@ -45,7 +47,9 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
         $this->access = $ilAccess;
 
         $this->pl = new ilShortLinkPlugin();
+
         $this->objShortLink = new ilObjShortLink();
+
     }
 
     /**
@@ -53,10 +57,11 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      * the user is redirected to ilPersonalDesktopGUI and an error message is shown.
      */
     public function gotoHook() {
-        if (preg_match("/^ShortLink(.*)/", $_GET['target'], $matches)) {
+		//$this->ctrl->redirectByClass(["ilUIPluginRouterGUI","ilShortLinkConfigGUI"], "listShortLinks");
+
             $this->ctrl->initBaseClass("ilUIPluginRouterGUI");
             $this->ctrl->setTargetScript("ilias.php");
             $this->ctrl->redirectByClass(["ilUIPluginRouterGUI","ilShortLinkGUI"], "listShortLinks");
-        }
+
     }
 }
