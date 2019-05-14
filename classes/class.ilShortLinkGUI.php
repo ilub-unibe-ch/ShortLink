@@ -4,7 +4,7 @@
  * User: kaufmann
  * Date: 13.05.19
  * Time: 11:06
- * @ilCtrl_isCalledBy ilShortLinkGUI: ilUIPluginRouterGUI
+ * @ilCtrl_isCalledBy ilShortLinkUIHookGUI, ilUIPluginRouterGUI: ilShortLinkGUI
  */
 
 require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php');
@@ -98,7 +98,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 				break;
 		}
 
-		$this->my_tpl->show();
+
 
 	}
 

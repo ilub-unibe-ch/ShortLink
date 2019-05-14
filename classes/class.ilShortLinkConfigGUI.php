@@ -31,7 +31,7 @@ require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
  * @author              Thomas Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version             $Id$
  *
- * @ilCtrl_Calls ilShortLinkGUI: ilUIPluginRouterGUI
+ * @ilCtrl_Calls ilShortLinkConfigGUI : ilShortLinkGUI
  *
  */
 class ilShortLinkConfigGUI extends ilPluginConfigGUI {
@@ -54,10 +54,6 @@ class ilShortLinkConfigGUI extends ilPluginConfigGUI {
 
 
 	function performCommand($cmd) {
-
-		global $DIC;
-
-		$DIC->ctrl()->redirectByClass(["ilUIPluginRouterGUI","ilShortLinkGUI"]);
-
+		//Do nothing here
 	}
 }
