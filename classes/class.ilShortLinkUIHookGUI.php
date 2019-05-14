@@ -9,7 +9,7 @@ include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
  *
  * @author  Thomas Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version 0.0.1
- * @ilCtrl_Calls ilShortLinkUIHookGUI: ilUIPluginRouterGUI, ilShortLinkGUI
+ *
  *
  */
 class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
