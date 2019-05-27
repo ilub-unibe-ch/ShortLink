@@ -46,7 +46,7 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
         $this->tabs = $ilTabs;
         $this->access = $ilAccess;
 
-        $this->pl = new ilShortLinkPlugin();
+        $this->pl = ilShortLinkPlugin::getInstance();
 
         $this->objShortLink = new ilObjShortLink();
 

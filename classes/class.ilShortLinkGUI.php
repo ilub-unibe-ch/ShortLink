@@ -63,7 +63,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 
 		$this->form = new ilPropertyFormGUI();
 		$this->shortLinkAccessChecker = new ilShortLinkAccess();
-		$this->pl = new ilShortLinkPlugin();
+		$this->pl = ilShortLinkPlugin::getInstance();
 		$this->obj = new ilObjShortLink();
 
 		$this->my_tpl = $tpl;

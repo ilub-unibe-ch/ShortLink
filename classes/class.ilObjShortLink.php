@@ -97,7 +97,7 @@ class ilObjShortLink {
         $this->db = $ilDB;
         $this->usr = $ilUser;
 
-        $this->pl = new ilShortLinkPlugin();
+        $this->pl = ilShortLinkPlugin::getInstance();
     }
 
     /**
