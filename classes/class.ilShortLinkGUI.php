@@ -12,9 +12,9 @@ require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
 include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php');
 require_once('Services/Utilities/classes/class.ilConfirmationGUI.php');
 include_once('Services/Form/classes/class.ilPropertyFormGUI.php');
+require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
 
-
-class ilShortLinkGUI {
+class ilShortLinkGUI extends ilObjectPluginGUI {
 
 	/**
 	 * @var ilTemplate $my_tpl
@@ -32,7 +32,10 @@ class ilShortLinkGUI {
 	 * @var ilObjShortLink $obj
 	 */
 	protected $obj;
-
+	/**
+	 * @var ilShortLinkAccess $shortLinkAccessChecker
+	 */
+	protected $shortLinkAccessChecker;
 	/**
 	 * @var ilPropertyFormGUI $form
 	 */
@@ -59,6 +62,7 @@ class ilShortLinkGUI {
 		$this->ctrl = $ilCtrl;
 
 		$this->form = new ilPropertyFormGUI();
+		$this->shortLinkAccessChecker = new ilShortLinkAccess();
 		$this->pl = new ilShortLinkPlugin();
 		$this->obj = new ilObjShortLink();
 
