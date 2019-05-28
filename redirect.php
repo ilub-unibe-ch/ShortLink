@@ -32,7 +32,7 @@ require_once("./Services/Init/classes/class.ilInitialisation.php");
 ilInitialisation::initILIAS();
 
 $fetcher = new ilObjShortLink();
-$plugin = new ilShortLinkPlugin();
+$plugin =ilShortLinkPlugin::getInstance();
 
 $full_url = $fetcher->fetchLongURL($_GET['shortlink']);
 

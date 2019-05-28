@@ -61,7 +61,7 @@ class ilShortLinkAccess {
 
         $this->usr = $ilUser;
 
-        $this->pl = new ilShortLinkPlugin();
+        $this->pl = ilShortLinkPlugin::getInstance();
         $this->obj = new ilObjShortLink();
 
     }
