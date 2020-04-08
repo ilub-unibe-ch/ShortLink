@@ -17,7 +17,7 @@ require_once('Services/Repository/classes/class.ilObjectPluginGUI.php');
 class ilShortLinkGUI extends ilObjectPluginGUI {
 
 	/**
-	 * @var ilTemplate $my_tpl
+	 * @var ilGlobalPageTemplate $my_tpl
 	 */
 	protected $my_tpl;
 	/**
@@ -67,7 +67,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI {
 		$this->obj = new ilObjShortLink();
 
 		$this->my_tpl = $tpl;
-		$this->my_tpl->getStandardTemplate();
+		$this->my_tpl->loadStandardTemplate();
 	}
 
 	/**
