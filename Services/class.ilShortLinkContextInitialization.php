@@ -17,7 +17,7 @@ class ilShortLinkContextInitialization extends ilContext {
      * Initialization of a existing context (CONTEXT_WEB_ACCESS_CHECK)
      */
     public static function init(string $a_type): bool {
-        parent::init($a_type);
+        return parent::init($a_type);
     }
 
 }
