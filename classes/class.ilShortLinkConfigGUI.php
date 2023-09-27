@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 	+-----------------------------------------------------------------------------+
 	| ILIAS open source                                                           |
@@ -32,28 +33,26 @@ require_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
  * @version             $Id$
  *
  * @ilCtrl_Calls ilShortLinkConfigGUI : ilShortLinkGUI
+ * @ilCtrl_IsCalledBy ilShortLinkConfigGUI: ilObjComponentSettingsGUI
+ * @ilCtrl_isCalledBy ilShortLinkConfigGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
  *
  */
 class ilShortLinkConfigGUI extends ilPluginConfigGUI {
 
 
 
-	public function executeCommand() {
-
-
+	public function executeCommand(): void
+    {
 		parent::executeCommand();
 		global $DIC;
 		$mainGUI = new ilShortLinkGUI();
 		$DIC->ctrl()->forwardCommand($mainGUI);
-
-
-
-
 	}
 
 
 
-	function performCommand($cmd) {
+	function performCommand($cmd): void
+    {
 		//Do nothing here
 	}
 }

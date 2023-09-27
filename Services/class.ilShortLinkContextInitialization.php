@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 require_once("./Services/Context/classes/class.ilContext.php");
 
 
@@ -16,7 +16,7 @@ class ilShortLinkContextInitialization extends ilContext {
     /**
      * Initialization of a existing context (CONTEXT_WEB_ACCESS_CHECK)
      */
-    public static function init($a_type) {
+    public static function init(string $a_type): bool {
         parent::init($a_type);
     }
 

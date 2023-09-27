@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php');
 
 /**
@@ -11,22 +11,32 @@ require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php
  */
 class ilShortLinkPlugin extends ilUserInterfaceHookPlugin {
 
-    const TABLE_NAME = 'ui_uihk_shortlink';
+    const  TABLE_NAME = 'ui_uihk_shortlink';
 
-	protected static $instance;
+	protected static ilShortLinkPlugin $instance;
+    protected \ILIAS\HTTP\Wrapper\ArrayBasedRequestWrapper $query;
+    protected \ILIAS\Refinery\Factory $refinery;
 
-	public static function getInstance() {
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->query = $DIC->http()->wrapper()->query();
+        $this->refinery = $DIC->refinery();
+        $component_repository = $DIC["component.repository"];
+        parent::__construct($DIC->database(), $component_repository, 'ilubmod');
+    }
+	public static function getInstance(): ilShortLinkPlugin
+    {
+        global $DIC;
+
 		if (!isset(self::$instance)) {
 			self::$instance = new self();
 		}
 		return self::$instance;
 	}
 
-
-	/**
-     * @return string
-     */
-    public function getPluginName() {
+    public function getPluginName(): string {
         return 'ShortLink';
     }
 }
