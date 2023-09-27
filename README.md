@@ -4,24 +4,13 @@
 
 1. ilias 5.0 or higher
 2. unibe /Customizing/global
-3. CtrlMainMenu Plugin
-
-### CtrlMainMenu Plugin Installation
-
-Clone the CtrlMinMenu plugin into Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu
-
-	git clone https://github.com/iLUB/CtrlMainMenu.git
-
-Go to Administration -> Plugins, apply the updates and activate the CtrlMainMenu plugin and checkout the required version you need.
-
-Configure the plugin, remove the unwanted entries like 'search', 'status' and 'settings'.
 
 ## Installation of the ShortLink Plugin
 
 Clone the ShortLink repository to Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ and checkout the
 required version you need.
 	
-	git clone https://github.com/iLUB/ShortLink.git
+	git clone https://github.com/ilub-unibe-ch/ShortLink.git
 
 Go to Administration -> Plugins, apply the updates and activate the ShortLink plugin.
 

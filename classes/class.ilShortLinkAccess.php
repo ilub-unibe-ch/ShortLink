@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 	+-----------------------------------------------------------------------------+
 	| ILIAS open source                                                           |
@@ -36,20 +37,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilShortLinkAccess {
 
-    /**
-     * @var ilObjUser $usr
-     */
-    protected $usr;
-
-    /**
-     * @var ilShortLinkPlugin $pl
-     */
-    protected $pl;
-
-    /**
-     * @var ilObjShortLink;
-     */
-    protected $obj;
+    protected ilObjUser $usr;
+    protected ilShortLinkPlugin $pl;
+    protected ilObjShortLink $obj;
 
     /**
      * ilShortLink constructor
@@ -69,12 +59,10 @@ class ilShortLinkAccess {
     /**
      * Checking if the current user is owner OR admin. Returns true if the user is either the owner of
      * the shortlink or administrator
-     *
-     * @param ilObjShortLink $obj
      * @param $idNum
-     * @return boolean
      */
-    public function checkPermission(ilObjShortLink $obj, $idNum) {
+    public function checkPermission(ilObjShortLink $obj, int $idNum): bool
+    {
         $isOwner = ($obj->getOwner($idNum) == $this->usr->getLogin());
         $isAdmin = $this->checkAdministrationPrivileges();
         if($isOwner || $isAdmin) {
@@ -85,19 +73,17 @@ class ilShortLinkAccess {
 
     /**
      * Checking if the user is an administrator
-     *
-     * @return bool
      */
-    public function checkAdministrationPrivileges() {
+    public function checkAdministrationPrivileges(): bool
+    {
         return $this->obj->checkAdministrationPrivilegesFromDB();
     }
 
     /**
      * Checking if the user is a valid registered user
-     *
-     * @return bool
      */
-    public function checkIfUserIsAnonymous() {
+    public function checkIfUserIsAnonymous(): bool
+    {
         return $this->obj->checkIfUserIsAnonymous();
 
     }

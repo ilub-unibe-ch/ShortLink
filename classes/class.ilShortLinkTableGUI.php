@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 	+-----------------------------------------------------------------------------+
 	| ILIAS open source                                                           |
@@ -35,35 +36,17 @@ require_once('Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvance
  */
 class ilShortLinkTableGUI extends ilTable2GUI {
 
-    /**
-     * @var ilToolbarGUI
-     */
-    public $toolbar;
+    public ilToolbarGUI $toolbar;
 
-    /**
-     * @var array
-     */
-    protected $actions = array();
+    protected array $actions = array();
 
-    /**
-     * @var ilCtrl $ctrl
-     */
-    protected $ctrl;
+    protected ilCtrl $ctrl;
 
-    /**
-     * @var ilObjShortLink $obj
-     */
-    protected $obj;
+    protected ilObjShortLink $obj;
 
-    /**
-     * @var ilShortLinkPlugin $pl
-     */
-    protected $pl;
+    protected ilShortLinkPlugin $pl;
 
-    /**
-     * @var string $linkToShortURL
-     */
-    protected $linkToShortURL;
+    protected string $linkToShortURL;
 
     /**
      * ilShortLinkTableGUI constructor
@@ -71,7 +54,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      * @param ilShortLinkConfigGUI    $a_parent_obj   the ShortLink main GUI
      * @param string            $a_parent_cmd   the table name ilShortLinkPlugin::TABLE_NAME
      */
-    public function __construct($a_parent_obj, $a_parent_cmd) {
+    public function __construct(ilShortLinkGUI $a_parent_obj, string $a_parent_cmd)
+    {
         global $ilCtrl;
         $this->pl = ilShortLinkPlugin::getInstance();
         $this->ctrl = $ilCtrl;
@@ -94,10 +78,10 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     /**
      *
      * Get data and put it into an array
-     *
-     * @return array
+
      */
-    public function getMyDataFromDb() {
+    public function getMyDataFromDb(): void
+    {
         $this->obj = new ilObjShortLink();
 
         $this->setDefaultOrderField("id");
@@ -119,7 +103,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      * @param string    $target_class   the receiving class name
      * @param string    $target_cmd     the command which $target_class should execute
      */
-    public function addAction($id, $title, $target_class, $target_cmd) {
+    public function addAction(string $id, string $title, string $target_class, string $target_cmd): void
+    {
         $this->actions[$id] = new stdClass();
         $this->actions[$id]->id = $id;
         $this->actions[$id]->title = $title;
@@ -129,10 +114,9 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
     /**
      * Fills the single rows by id
-     *
-     * @param array $a_set
      */
-    protected function fillRow($a_set) {
+    protected function fillRow(array $a_set): void
+    {
         $this->initRowTemplate();
 
         $this->tpl->setVariable("ID", $a_set['id']);
@@ -148,7 +132,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     /**
      * sets the template used for creating the rows
      */
-    protected function initRowTemplate() {
+    protected function initRowTemplate(): void
+    {
         $this->setRowTemplate('tpl.table_list_row.html',
             'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink');
     }
@@ -156,19 +141,21 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     /**
      * Creates the lables for the columns in the table GUI for the ShortLink plugin
      */
-    protected function initColumns() {
+    protected function initColumns()
+    {
         $this->addColumn("ID", 'id');
         $this->addColumn("shortLink", 'short_link');
         $this->addColumn("url", 'full_url');
         $this->addColumn("customer", 'customer');
         $this->addColumn("user", 'contact_user_login');
-        $this->addColumn('', '', 1);
+        $this->addColumn('', '', '1');
     }
 
     /**
      * Adds edit and delete actions to every ShortLink row entry
      */
-    protected function initActions() {
+    protected function initActions(): void
+    {
         global $lng;
         $this->addAction('edit', $lng->txt('edit'), get_class($this->parent_obj), 'edit');
         $this->addAction('delete', $lng->txt('delete'), get_class($this->parent_obj), 'delete');
@@ -177,7 +164,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     /**
      * Initializes the toolbar with an add button to add new ShortLinks
      */
-    protected function initToolbar() {
+    protected function initToolbar() : void
+    {
         $toolbar = new ilToolbarGUI();
         $toolbar->addButton($this->pl->txt('add'), $this->ctrl->getLinkTarget($this->parent_obj, 'add'));
         $this->setToolbar($toolbar);
@@ -185,16 +173,15 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
     /**
      * Adds the drop down Action Button to ever single ShortLink
-     *
-     * @param array $a_set data array
      */
-    protected function addActionsToRow($a_set) {
+    protected function addActionsToRow(array $a_set)
+    {
         global $lng;
         $this->ctrl->setParameterByClass(get_class($this->parent_obj), 'link_id',  $a_set['id']);
         if (! empty($this->actions)) {
             $alist = new ilAdvancedSelectionListGUI();
-            $alist->setId($a_set['id']);
-            $alist->setListTitle($lng->txt('actions', FALSE));
+            $alist->setId((string)$a_set['id']);
+            $alist->setListTitle($lng->txt('actions'));
             $alist->setAutoHide(TRUE);
 
             foreach ($this->actions as $action) {
@@ -220,7 +207,8 @@ class ilShortLinkTableGUI extends ilTable2GUI {
      *
      * @return string
      */
-    public function render() {
+    public function render(): string
+    {
         $index_table_tpl = new ilTemplate("tpl.table_with_toolbar.html", true, true, "Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink");
         if ($this->getToolbar()) {
             $index_table_tpl->setVariable('TOOLBAR', $this->getToolbar()->getHTML());
@@ -230,17 +218,12 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         return $index_table_tpl->get();
     }
 
-    /**
-     * @param $toolbar
-     */
-    protected function setToolbar($toolbar) {
+    protected function setToolbar(ilToolbarGUI $toolbar)
+    {
         $this->toolbar = $toolbar;
     }
 
-    /**
-     * @return ilToolbarGUI
-     */
-    protected function getToolbar() {
+    protected function getToolbar(): ilToolbarGUI {
         return $this->toolbar;
     }
 }
