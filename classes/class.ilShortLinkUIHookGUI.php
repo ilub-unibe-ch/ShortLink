@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php');
@@ -13,16 +14,12 @@ include_once('Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
  *
  *
  */
-class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
-
+class ilShortLinkUIHookGUI extends ilUIHookPluginGUI
+{
     protected ilCtrl $ctrl;
-
-    protected ilTabsGUI $tabs;
-
+   // protected ilTabsGUI $tabs;
     protected ilAccessHandler $access;
-
     protected ilShortLinkPlugin $pl;
-
     protected ilObjShortLink $objShortLink;
 
 
@@ -30,19 +27,22 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      * ilShortLinkUIHookGUI constructor
      *
      */
-    function __construct()
+    public function __construct()
     {
         global $DIC;
-        //global $ilCtrl, $ilTabs, $ilAccess, $tpl;
 
         $this->ctrl = $DIC->ctrl();
-        //$this->tabs = $DIC->tabs();
         $this->access = $DIC->access();
 
         $this->pl = ilShortLinkPlugin::getInstance();
 
         $this->objShortLink = new ilObjShortLink();
 
+    }
+    public function getHTML(string $a_comp, string $a_part, array $a_par = []): array
+    {
+
+        return ['mode' => ilUIHookPluginGUI::KEEP, 'html' => ''];
     }
 
     /**
@@ -51,11 +51,11 @@ class ilShortLinkUIHookGUI extends ilUIHookPluginGUI {
      */
     public function gotoHook(): void
     {
-		if (preg_match("/^ShortLink(.*)/", $_GET['target'], $matches)) {
-			$this->ctrl->initBaseClass("ilUIPluginRouterGUI");
-			$this->ctrl->setTargetScript("ilias.php");
-			$this->ctrl->redirectByClass(["ilUIPluginRouterGUI","ilShortLinkGUI"], "listShortLinks");
-		}
+        if (preg_match("/^ShortLink(.*)/", $_GET['target'], $matches)) {
+            $this->ctrl->initBaseClass("ilUIPluginRouterGUI");
+            $this->ctrl->setTargetScript("ilias.php");
+            $this->ctrl->redirectByClass(["ilUIPluginRouterGUI","ilShortLinkGUI"], "listShortLinks");
+        }
 
     }
 }

@@ -24,7 +24,7 @@ class ilShortLinkPlugin extends ilUserInterfaceHookPlugin {
         $this->query = $DIC->http()->wrapper()->query();
         $this->refinery = $DIC->refinery();
         $component_repository = $DIC["component.repository"];
-        parent::__construct($DIC->database(), $component_repository, 'ilubmod');
+        parent::__construct($DIC->database(), $component_repository, 'shortlink');
     }
 	public static function getInstance(): ilShortLinkPlugin
     {
