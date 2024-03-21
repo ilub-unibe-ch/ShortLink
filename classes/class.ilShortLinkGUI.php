@@ -88,7 +88,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI
             $this->obj = new ilObjShortLink();
         }
 
-        $this->my_tpl->setOnScreenMessage(IlGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS, $this->pl->txt('info_box'), true);
+        $this->my_tpl->setOnScreenMessage(IlGlobalTemplateInterface::MESSAGE_TYPE_INFO, $this->pl->txt('info_box'), true);
 
         $this->my_tpl->setTitle($this->pl->txt('title'));
         $this->listShortLinks();
