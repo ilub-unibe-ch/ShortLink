@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
+
 /*
 	+-----------------------------------------------------------------------------+
 	| ILIAS open source                                                           |
@@ -37,9 +40,11 @@ class ilShortLinkTableGUI extends ilTable2GUI {
 
     public ilToolbarGUI $toolbar;
 
-    protected array $actions = [];
-
     protected ilCtrl $ctrl;
+
+    protected ?Factory $ui_factory = null;
+
+    protected ?Renderer $renderer = null;
 
     protected ilObjShortLink $obj;
 
@@ -65,7 +70,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->initColumns();
         $this->initRowTemplate();
         $this->initToolbar();
-        $this->initActions();
+        $this->initUI();
 
         $this->setShowRowsSelector(true);
 
@@ -95,22 +100,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->setData($this->obj->readEntriesPerUser());
     }
 
-    /**
-     * Adds different actions to the GUI
-     *
-     * @param string    $id             the action identifier
-     * @param string    $title          the action text
-     * @param string    $target_class   the receiving class name
-     * @param string    $target_cmd     the command which $target_class should execute
-     */
-    public function addAction(string $id, string $title, string $target_class, string $target_cmd): void
-    {
-        $this->actions[$id] = new stdClass();
-        $this->actions[$id]->id = $id;
-        $this->actions[$id]->title = $title;
-        $this->actions[$id]->target_class = $target_class;
-        $this->actions[$id]->target_cmd = $target_cmd;
-    }
 
     /**
      * @throws ilCtrlException
@@ -152,15 +141,6 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->addColumn('', '', '1');
     }
 
-    /**
-     * Adds edit and delete actions to every ShortLink row entry
-     */
-    protected function initActions(): void
-    {
-        global $lng;
-        $this->addAction('edit', $lng->txt('edit'), $this->parent_obj::class, 'edit');
-        $this->addAction('delete', $lng->txt('delete'), $this->parent_obj::class, 'delete');
-    }
 
     /**
      * Initializes the toolbar with an add button to add new ShortLinks
@@ -173,6 +153,16 @@ class ilShortLinkTableGUI extends ilTable2GUI {
         $this->setToolbar($toolbar);
     }
 
+    private function initUI()
+    {
+        if(is_null($this->ui_factory)||is_null($this->renderer)){
+            global $DIC;
+            $this->ui_factory = $DIC->ui()->factory();
+            $this->renderer = $DIC->ui()->renderer();
+        }
+
+    }
+
     /**
      * Adds the dropdown Action Button to ever single ShortLink
      * @throws ilCtrlException
@@ -181,19 +171,21 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     protected function addActionsToRow(array $a_set): void
     {
         global $lng;
+        $action_items = array();
         $this->ctrl->setParameterByClass($this->parent_obj::class, 'link_id', $a_set['id']);
-        if (! empty($this->actions)) {
-            $alist = new ilAdvancedSelectionListGUI();
-            $alist->setId((string)$a_set['id']);
-            $alist->setListTitle($lng->txt('actions'));
-            $alist->setAutoHide(TRUE);
-
-            foreach ($this->actions as $action) {
-                $alist->addItem($action->title, $action->id,
-                    $this->ctrl->getLinkTargetByClass($action->target_class, $action->target_cmd));
-            }
-            $this->tpl->setVariable('ACTION', $alist->getHTML());
-        }
+        $dropdown = $this->ui_factory->dropdown()->standard(
+            [
+                $this->ui_factory->link()->standard(
+                    $lng->txt('edit'),
+                    $this->ctrl->getLinkTarget($this->parent_obj, 'edit'),
+                ),
+                $this->ui_factory->link()->standard(
+                    $lng->txt('delete'),
+                    $this->ctrl->getLinkTarget($this->parent_obj, 'delete'),
+                )
+            ]
+        );
+            $this->tpl->setVariable('ACTION', $this->renderer->render($dropdown->withLabel($lng->txt('actions'))));
     }
 
     // TODO: NOT WORKING AT ALL NEEDS FIXING
