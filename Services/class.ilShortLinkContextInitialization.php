@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-require_once './Services/Context/classes/class.ilContext.php';
+require_once './components/ILIAS/Context/classes/class.ilContext.php';
 
 
 /**

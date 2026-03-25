@@ -8,10 +8,7 @@ declare(strict_types=1);
  * @ilCtrl_isCalledBy ilShortLinkUIHookGUI, ilUIPluginRouterGUI: ilShortLinkGUI
  */
 
-require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php';
-require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php';
-include_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php';
-include_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
+
 
 class ilShortLinkGUI extends ilObjectPluginGUI
 {

@@ -22,7 +22,6 @@ declare(strict_types=1);
 	+-----------------------------------------------------------------------------+
 */
 
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkAccess.php';
 
 
 /**

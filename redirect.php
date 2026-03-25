@@ -8,7 +8,7 @@
  * Date: 16/01/16
  * Time: 21:10
  */
-$path = stristr(__FILE__, 'Customizing', true);
+$path = stristr(__FILE__, 'public', true);
 
 if (is_file('path')) {
     $path = file_get_contents('path');
@@ -16,11 +16,7 @@ if (is_file('path')) {
 
 chdir($path);
 
-require_once 'libs/composer/vendor/autoload.php';
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/Services/class.ilShortLinkContextInitialization.php';
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php';
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php';
-
+require_once 'vendor/composer/vendor/autoload.php';
 
 /**
  * Initialization of the ShortLink Context, that allows to enter the shortlink without being logged into ILIAS. If user is not logged in yet she
@@ -28,8 +24,6 @@ require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 ilShortLinkContextInitialization::init(ilContext::CONTEXT_WEB);
 
-
-require_once './Services/Init/classes/class.ilInitialisation.php';
 ilInitialisation::initILIAS();
 
 global $DIC;

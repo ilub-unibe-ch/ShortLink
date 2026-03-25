@@ -4,7 +4,6 @@ declare(strict_types=1);
 use ILIAS\HTTP\Wrapper\ArrayBasedRequestWrapper;
 use ILIAS\Refinery\Factory;
 
-require_once './Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php';
 
 /**
  * RenderedBy Plugin

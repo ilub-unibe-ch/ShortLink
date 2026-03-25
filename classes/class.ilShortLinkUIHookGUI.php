@@ -5,10 +5,6 @@ declare(strict_types=1);
 use ILIAS\HTTP\Wrapper\ArrayBasedRequestWrapper;
 use ILIAS\Refinery\Factory;
 
-require_once './Services/UIComponent/classes/class.ilUIHookPluginGUI.php';
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkPlugin.php';
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilObjShortLink.php';
-include_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink/classes/class.ilShortLinkTableGUI.php';
 
 /**
  * Class ilShortLinkUIHookGUI
@@ -21,7 +17,6 @@ include_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
 class ilShortLinkUIHookGUI extends ilUIHookPluginGUI
 {
     protected ilCtrl $ctrl;
-   // protected ilTabsGUI $tabs;
     protected ilAccessHandler $access;
     protected ilShortLinkPlugin $pl;
     protected ilObjShortLink $objShortLink;

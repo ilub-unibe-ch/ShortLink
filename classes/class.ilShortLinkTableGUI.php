@@ -21,8 +21,7 @@ declare(strict_types=1);
 	| Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. |
 	+-----------------------------------------------------------------------------+
 */
-require_once 'Services/Table/classes/class.ilTable2GUI.php';
-require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
+
 
 
 
@@ -137,7 +136,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     protected function initRowTemplate(): void
     {
         $this->setRowTemplate('tpl.table_list_row.html',
-            'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink');
+            'public/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink');
     }
 
     /**
@@ -219,7 +218,7 @@ class ilShortLinkTableGUI extends ilTable2GUI {
     {
         $index_table_tpl = new ilTemplate(
             'tpl.table_with_toolbar.html', true, true,
-            'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink'
+            'public/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/ShortLink'
         );
         if ($this->getToolbar()) {
             $index_table_tpl->setVariable('TOOLBAR', $this->getToolbar()->getHTML());
