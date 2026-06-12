@@ -25,3 +25,4 @@ info_box#:#Nachdem der ShortLink gespeichert wurde, kann über www.yourILIASserv
 customer#:#Kunde
 link_not_found#:#Der von Ihnen eingegebene ShortLink existiert nicht.
 cmdNode_not_found#:#Der cmdNode konnte für das ShortLink Plugin nicht gefunden werden:
+form_input_not_valid#:#Bitte füllen Sie alle Pflichtfelder aus.
