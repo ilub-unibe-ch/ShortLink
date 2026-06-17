@@ -25,3 +25,4 @@ info_box#:#After saving the ShortLink, it can be reached by typing www.yourILIAS
 customer#:#Customer
 link_not_found#:#The ShortLink you entered, does not exist.
 cmdNode_not_found#:#The requested cmdNode for the ShortLink plugin could not found:
+form_input_not_valid#:#Please fill in all required fields.

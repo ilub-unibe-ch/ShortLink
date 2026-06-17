@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 
 class ilShortLinkGUI extends ilObjectPluginGUI
+
 {
     protected ilGlobalPageTemplate $my_tpl;
     protected ilCtrl $ctrl;
@@ -232,12 +233,51 @@ class ilShortLinkGUI extends ilObjectPluginGUI
      */
     public function doUpdate(): void
     {
-        $this->obj->setId($this->post_wrapper->retrieve('shortLink_id', $this->refinery->kindlyTo()->int()));
-        $this->obj->setShortLink($this->post_wrapper->retrieve('shortLink', $this->refinery->kindlyTo()->string()));
-        $this->obj->setLongURL($this->post_wrapper->retrieve('longUrl', $this->refinery->kindlyTo()->string()));
-        $this->obj->setCustomer($this->post_wrapper->retrieve('customer', $this->refinery->kindlyTo()->string()));
+        $this->form = $this->initConfigurationForm(true);
+
+        if (!$this->form->checkInput()) {
+            $this->form->setValuesByPost();
+            $this->my_tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->pl->txt('form_input_not_valid'),
+                true
+            );
+            $this->my_tpl->setContent($this->form->getHTML());
+            return;
+        }
+
+        $id = $this->post_wrapper->retrieve(
+            'shortLink_id',
+            $this->refinery->kindlyTo()->int()
+        );
+
+        $shortLink = trim($this->form->getInput('shortLink'));
+        $longUrl = trim($this->form->getInput('longUrl'));
+        $customer = trim($this->form->getInput('customer'));
+
+        if ($shortLink === '' || $longUrl === '' || $customer === '') {
+            $this->form->setValuesByPost();
+            $this->my_tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->pl->txt('form_input_not_valid'),
+                true
+            );
+            $this->my_tpl->setContent($this->form->getHTML());
+            return;
+        }
+
+        $this->obj->setId($id);
+        $this->obj->setShortLink($shortLink);
+        $this->obj->setLongURL($longUrl);
+        $this->obj->setCustomer($customer);
         $this->obj->doUpdate();
-        $this->my_tpl->setOnScreenMessage(ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS, $this->pl->txt('success_update_entry'), true);
+
+        $this->my_tpl->setOnScreenMessage(
+            ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+            $this->pl->txt('success_update_entry'),
+            true
+        );
+
         $this->ctrl->redirect($this, 'showContent');
     }
 
@@ -320,7 +360,7 @@ class ilShortLinkGUI extends ilObjectPluginGUI
         $this->form->addItem($ti);
 
         // HiddenInputGui for id
-        $ti = new ilHiddenInputGUI($this->pl->txt('shortLink_id'));
+        $ti = new ilHiddenInputGUI('shortLink_id');
         $this->form->addItem($ti);
         if ($update) {
             $this->form->addCommandButton('doUpdate', $this->pl->txt('update'));
